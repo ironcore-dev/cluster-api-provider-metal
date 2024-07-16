@@ -125,6 +125,7 @@ func (r *MetalClusterReconciler) reconcileDelete(ctx context.Context, clusterSco
 	return ctrl.Result{}, nil
 }
 
+//nolint:unparam
 func (r *MetalClusterReconciler) reconcileNormal(_ context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
 	clusterScope.Logger.Info("Reconciling MetalCluster")
 

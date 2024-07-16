@@ -19,6 +19,10 @@ Files:
   go.mod
   go.sum
   hack/*
+  scripts/*
+  Tiltfile
+  tilt-provider.json
+  templates/*
 Copyright: 2024 SAP SE or an SAP affiliate company and IronCore contributors
 License: Apache-2.0
 
