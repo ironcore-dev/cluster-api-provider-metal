@@ -10,6 +10,9 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
+GOARCH  := $(shell go env GOARCH)
+GOOS    := $(shell go env GOOS)
+
 # CONTAINER_TOOL defines the container tool to be used for building images.
 # Be aware that the target commands are only tested with Docker which is
 # scaffolded by default. However, you might want to replace it to use other
@@ -77,6 +80,10 @@ lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes
 	$(GOLANGCI_LINT) run --fix
 
 ##@ Build
+
+.PHONY: docs
+docs: gen-crd-api-reference-docs ## Run go generate to generate API reference documentation.
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/api.md
 
 .PHONY: build
 build: manifests generate fmt vet ## Build manager binary.
@@ -150,23 +157,59 @@ LOCALBIN ?= $(shell pwd)/bin
 $(LOCALBIN):
 	mkdir -p $(LOCALBIN)
 
+# curl retries
+CURL_RETRIES=3
+
 ## Tool Binaries
-KUBECTL ?= kubectl
+KUBECTL ?= $(LOCALBIN)/kubectl-$(KUBECTL_VERSION)
+KUBECTL_BIN ?= $(LOCALBIN)/kubectl
+HELM ?= $(LOCALBIN)/helm-$(HELM_VERSION)
+HELM_BIN ?= $(LOCALBIN)/helm
 KUSTOMIZE ?= $(LOCALBIN)/kustomize-$(KUSTOMIZE_VERSION)
+KUSTOMIZE_BIN ?= $(LOCALBIN)/kustomize
 CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen-$(CONTROLLER_TOOLS_VERSION)
 ENVTEST ?= $(LOCALBIN)/setup-envtest-$(ENVTEST_VERSION)
+ENVSUBST ?= $(LOCALBIN)/envsubst-$(ENVSUBST_VER)
+ENVSUBST_BIN ?= $(LOCALBIN)/envsubst
 GOLANGCI_LINT = $(LOCALBIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
+GEN_CRD_API_REFERENCE_DOCS ?= $(LOCALBIN)/gen-crd-api-reference-docs-$(GEN_CRD_API_REFERENCE_DOCS_VERSION)
 
 ## Tool Versions
 KUSTOMIZE_VERSION ?= v5.4.1
+KUBECTL_VERSION ?= v1.29.4
+HELM_VERSION ?= v3.15.3
 CONTROLLER_TOOLS_VERSION ?= v0.15.0
 ENVTEST_VERSION ?= release-0.18
+ENVSUBST_VER := v1.2.0
 GOLANGCI_LINT_VERSION ?= v1.57.2
+GEN_CRD_API_REFERENCE_DOCS_VERSION ?= v0.3.0
+
+# Directiries.
+TOOLS_BIN_DIR := $(abspath $(TOOLS_DIR)/bin)
+
+KIND_CLUSTER_NAME ?= capm
 
 .PHONY: kustomize
 kustomize: $(KUSTOMIZE) ## Download kustomize locally if necessary.
 $(KUSTOMIZE): $(LOCALBIN)
 	$(call go-install-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v5,$(KUSTOMIZE_VERSION))
+	ln -sf "$(KUSTOMIZE)" "$(KUSTOMIZE_BIN)"
+
+.PHONY: kubectl
+kubectl: $(KUBECTL) ## Download kubectl locally if necessary.
+$(KUBECTL): $(LOCALBIN)
+	curl --retry $(CURL_RETRIES) -fsL https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/$(GOOS)/$(GOARCH)/kubectl -o $(KUBECTL)
+	ln -sf "$(KUBECTL)" "$(KUBECTL_BIN)"
+	chmod +x "$(KUBECTL_BIN)" "$(KUBECTL)"
+
+.PHONY: helm
+helm: $(HELM) ## Download helm locally if necessary.
+$(HELM): $(LOCALBIN)
+	curl --retry $(CURL_RETRIES) -fsL https://get.helm.sh/helm-$(HELM_VERSION)-$(GOOS)-$(GOARCH).tar.gz -o $(HELM).tar.gz
+	tar xzf $(HELM).tar.gz -C $(LOCALBIN) $(GOOS)-$(GOARCH)/helm
+	mv $(LOCALBIN)/$(GOOS)-$(GOARCH)/helm $(HELM)
+	ln -sf "$(HELM)" "$(HELM_BIN)"
+	chmod +x "$(HELM_BIN)" "$(HELM)"
 
 .PHONY: controller-gen
 controller-gen: $(CONTROLLER_GEN) ## Download controller-gen locally if necessary.
@@ -178,10 +221,21 @@ envtest: $(ENVTEST) ## Download setup-envtest locally if necessary.
 $(ENVTEST): $(LOCALBIN)
 	$(call go-install-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest,$(ENVTEST_VERSION))
 
+.PHONY: envsubst
+envsubst: $(ENVSUBST) ## Download envsubst locally if necessary.
+$(ENVSUBST): $(LOCALBIN)
+	$(call go-install-tool,$(ENVSUBST),github.com/a8m/envsubst/cmd/envsubst,$(ENVSUBST_VER))
+	ln -sf "$(ENVSUBST)" "$(ENVSUBST_BIN)"
+
 .PHONY: golangci-lint
 golangci-lint: $(GOLANGCI_LINT) ## Download golangci-lint locally if necessary.
 $(GOLANGCI_LINT): $(LOCALBIN)
 	$(call go-install-tool,$(GOLANGCI_LINT),github.com/golangci/golangci-lint/cmd/golangci-lint,${GOLANGCI_LINT_VERSION})
+
+.PHONY: gen-crd-api-reference-docs
+gen-crd-api-reference-docs: $(GEN_CRD_API_REFERENCE_DOCS) ## Download gen-crd-api-reference-docs locally if necessary.
+$(GEN_CRD_API_REFERENCE_DOCS): $(LOCALBIN)
+	$(call go-install-tool,$(GEN_CRD_API_REFERENCE_DOCS),github.com/ahmetb/gen-crd-api-reference-docs,$(GEN_CRD_API_REFERENCE_DOCS_VERSION))
 
 # go-install-tool will 'go install' any package with custom target and name of binary, if it doesn't exist
 # $1 - target path with name of binary (ideally with version)
@@ -196,3 +250,39 @@ GOBIN=$(LOCALBIN) go install $${package} ;\
 mv "$$(echo "$(1)" | sed "s/-$(3)$$//")" $(1) ;\
 }
 endef
+
+## --------------------------------------
+##@ Development
+## --------------------------------------
+
+.PHONY: delete-workload-cluster
+delete-workload-cluster: $(CLUSTERCTL) ## Deletes the development Kubernetes Cluster "$CLUSTER_NAME"
+	@echo 'Your CAPM resources will now be deleted, this can take some minutes'
+	$(CLUSTERCTL) \
+	delete cluster -v 4 \
+	--bootstrap-type kind \
+	--bootstrap-flags="name=clusterapi" \
+	--cluster $(CLUSTER_NAME) \
+	--kubeconfig ./kubeconfig \
+	-p ./examples/_out/provider-components.yaml \
+
+## --------------------------------------
+## Tilt / Kind
+## --------------------------------------
+
+.PHONY: kind-create
+kind-create: $(KUBECTL) ## create capm kind cluster if needed
+	./scripts/kind-with-registry.sh
+
+.PHONY: kind-delete
+kind-delete: ## Destroys the "capm" kind cluster.
+	kind delete cluster --name=$(KIND_CLUSTER_NAME)
+	docker stop kind-registry && docker rm kind-registry
+
+.PHONY: tilt-up
+tilt-up: $(ENVSUBST) $(KUSTOMIZE) $(HELM) $(KUBECTL) kind-create ## start tilt and build kind cluster if needed
+	EXP_CLUSTER_RESOURCE_SET=true tilt up
+
+.PHONY: delete-cluster
+delete-cluster: delete-workload-cluster  ## Deletes the example kind cluster "capm"
+	kind delete cluster --name=$(KIND_CLUSTER_NAME)

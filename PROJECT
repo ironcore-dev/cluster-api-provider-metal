@@ -7,4 +7,31 @@ layout:
 - go.kubebuilder.io/v4
 projectName: cluster-api-provider-metal
 repo: github.com/ironcore-dev/cluster-api-provider-metal
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: cluster.x-k8s.io
+  group: infrastructure
+  kind: MetalCluster
+  path: github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: cluster.x-k8s.io
+  group: infrastructure
+  kind: MetalMachine
+  path: github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: cluster.x-k8s.io
+  group: infrastructure
+  kind: MetalMachineTemplate
+  path: github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1
+  version: v1alpha1
 version: "3"

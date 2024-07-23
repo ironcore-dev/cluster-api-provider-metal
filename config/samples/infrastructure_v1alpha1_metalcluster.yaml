@@ -1,0 +1,11 @@
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: MetalCluster
+metadata:
+  labels:
+    app.kubernetes.io/name: cluster-api-provider-metal
+    app.kubernetes.io/managed-by: kustomize
+  name: metalcluster-sample
+spec:
+  controlPlaneEndpoint:
+    host: foo
+    port: 443
