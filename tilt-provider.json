@@ -1,0 +1,16 @@
+{
+  "name": "metal",
+  "config": {
+    "image": "ghcr.io/ironcore-dev/cluster-api-provider-metal",
+    "live_reload_deps": [
+      "go.mod",
+      "go.sum",
+      "api",
+      "cmd",
+      "config",
+      "internal"
+    ],
+    "label": "CAPM",
+    "manager_name": "capm-controller-manager"
+  }
+}
