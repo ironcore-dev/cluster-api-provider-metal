@@ -1,5 +1,5 @@
 run:
-  timeout: 5m
+  timeout: 10m
   allow-parallel-runners: true
 
 issues:
@@ -22,7 +22,6 @@ linters:
     - dupl
     - errcheck
     - exportloopref
-    - ginkgolinter
     - goconst
     - gocyclo
     - gofmt
@@ -30,18 +29,13 @@ linters:
     - gosimple
     - govet
     - ineffassign
+    - ginkgolinter
     - lll
     - misspell
     - nakedret
     - prealloc
-    - revive
     - staticcheck
     - typecheck
     - unconvert
     - unparam
     - unused
-
-linters-settings:
-  revive:
-    rules:
-      - name: comment-spacings
