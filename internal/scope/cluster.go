@@ -5,6 +5,7 @@ package scope
 
 import (
 	"context"
+
 	"github.com/go-logr/logr"
 	infrav1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
 	"github.com/pkg/errors"
