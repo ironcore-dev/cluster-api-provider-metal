@@ -161,7 +161,7 @@ $(LOCALBIN):
 CURL_RETRIES=3
 
 ## Tool Binaries
-KUBECTL ?= $(LOCALBIN)/kubectl-$(KUBECTL_VERSION)
+KUBECTL ?= kubectl
 KUBECTL_BIN ?= $(LOCALBIN)/kubectl
 HELM ?= $(LOCALBIN)/helm-$(HELM_VERSION)
 HELM_BIN ?= $(LOCALBIN)/helm

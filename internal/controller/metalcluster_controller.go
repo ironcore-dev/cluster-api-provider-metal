@@ -6,6 +6,7 @@ package controller
 import (
 	"context"
 	"fmt"
+
 	"github.com/ironcore-dev/cluster-api-provider-metal/internal/scope"
 	"github.com/pkg/errors"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -124,7 +125,7 @@ func (r *MetalClusterReconciler) reconcileDelete(ctx context.Context, clusterSco
 	return ctrl.Result{}, nil
 }
 
-func (r *MetalClusterReconciler) reconcileNormal(ctx context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
+func (r *MetalClusterReconciler) reconcileNormal(_ context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
 	clusterScope.Logger.Info("Reconciling MetalCluster")
 
 	// If the MetalCluster doesn't have our finalizer, add it.
