@@ -21,11 +21,6 @@ on:
 
 jobs:
   buildAndPush:
-    strategy:
-      matrix:
-        image:
-        - name: cluster-api-provider-metal
-          target: manager
     permissions:
       contents: read
       packages: write
@@ -37,7 +32,7 @@ jobs:
       id: meta
       with:
         images: |
-          ghcr.io/${{ github.repository_owner }}/${{ matrix.image.name }}
+          ghcr.io/${{ github.repository_owner }}/cluster-api-metal-controller
         tags: |
           type=semver,pattern={{version}}
           type=schedule
@@ -79,4 +74,4 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        target: ${{ matrix.image.target }}
+        target: manager
