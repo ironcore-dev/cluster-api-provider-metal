@@ -129,3 +129,15 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - metal.ironcore.dev
+  resources:
+  - serverclaims
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
