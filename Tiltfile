@@ -218,3 +218,19 @@ k8s_resource(
     trigger_mode=TRIGGER_MODE_MANUAL,
     auto_init=False
 )
+
+k8s_yaml('./config/samples/infrastructure_v1alpha1_metalmachinetemplate.yaml')
+k8s_resource(
+    objects=['metalmachinetemplate-sample-control-plane:metalmachinetemplate'],
+    new_name='metalmachinetemplate-sample-control-plane',
+    trigger_mode=TRIGGER_MODE_MANUAL,
+    auto_init=False
+)
+
+k8s_yaml('./templates/test/cluster_v1beta1_kubeadmcontrolplane.yaml')
+k8s_resource(
+    objects=['kubeadmcontrolplane-sample-cp:kubeadmcontrolplane'],
+    new_name='kubeadmcontrolplane-sample-cp',
+    trigger_mode=TRIGGER_MODE_MANUAL,
+    auto_init=False
+)

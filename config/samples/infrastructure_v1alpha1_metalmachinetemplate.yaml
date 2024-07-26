@@ -4,6 +4,10 @@ metadata:
   labels:
     app.kubernetes.io/name: cluster-api-provider-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalmachinetemplate-sample
+  name: metalmachinetemplate-sample-control-plane
 spec:
-  # TODO(user): Add fields here
+  template:
+    spec:
+      serverSelector:
+        matchLabels:
+          server: metal
