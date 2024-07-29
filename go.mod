@@ -7,8 +7,8 @@ toolchain go1.22.5
 require (
 	github.com/go-logr/logr v1.4.2
 	github.com/ironcore-dev/metal-operator v0.0.0-20240723113059-17e10339810f
-	github.com/onsi/ginkgo/v2 v2.19.0
-	github.com/onsi/gomega v1.33.1
+	github.com/onsi/ginkgo/v2 v2.19.1
+	github.com/onsi/gomega v1.34.0
 	github.com/pkg/errors v0.9.1
 	k8s.io/apimachinery v0.30.3
 	k8s.io/client-go v0.30.3
