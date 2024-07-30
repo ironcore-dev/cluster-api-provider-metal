@@ -27,6 +27,7 @@ import (
 
 	infrastructurev1alpha1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
 	"github.com/ironcore-dev/cluster-api-provider-metal/internal/controller"
+	metalv1alpha1 "github.com/ironcore-dev/metal-operator/api/v1alpha1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -39,6 +40,7 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(clusterv1.AddToScheme(scheme))
 	utilruntime.Must(infrastructurev1alpha1.AddToScheme(scheme))
+	utilruntime.Must(metalv1alpha1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 

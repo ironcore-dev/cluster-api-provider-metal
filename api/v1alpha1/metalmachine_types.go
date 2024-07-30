@@ -17,7 +17,7 @@ const (
 	MachineFinalizer = "metalmachine.infrastructure.cluster.x-k8s.io"
 
 	// DefaultReconcilerRequeue is the default value for the reconcile retry.
-	DefaultReconcilerRequeue = 10 * time.Second
+	DefaultReconcilerRequeue = 5 * time.Second
 )
 
 // MetalMachineSpec defines the desired state of MetalMachine

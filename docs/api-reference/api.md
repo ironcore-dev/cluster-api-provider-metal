@@ -288,6 +288,78 @@ This is used to claim specific Server types for a MetalMachine.</p>
 <div>
 <p>MetalMachineStatus defines the observed state of MetalMachine</p>
 </div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>ready</code><br/>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Ready indicates the Machine infrastructure has been provisioned and is ready.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>failureReason</code><br/>
+<em>
+sigs.k8s.io/cluster-api/errors.MachineStatusError
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>FailureReason will be set in the event that there is a terminal problem
+reconciling the Machine and will contain a succinct value suitable
+for machine interpretation.</p>
+<p>This field should not be set for transitive errors that a controller
+faces that are expected to be fixed automatically over
+time (like service outages), but instead indicate that something is
+fundamentally wrong with the Machine&rsquo;s spec or the configuration of
+the controller, and that manual intervention is required. Examples
+of terminal errors would be invalid combinations of settings in the
+spec, values that are unsupported by the controller, or the
+responsible controller itself being critically misconfigured.</p>
+<p>Any transient errors that occur during the reconciliation of Machines
+can be added as events to the Machine object and/or logged in the
+controller&rsquo;s output.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>failureMessage</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>FailureMessage will be set in the event that there is a terminal problem
+reconciling the Machine and will contain a more verbose string suitable
+for logging and human consumption.</p>
+<p>This field should not be set for transitive errors that a controller
+faces that are expected to be fixed automatically over
+time (like service outages), but instead indicate that something is
+fundamentally wrong with the Machine&rsquo;s spec or the configuration of
+the controller, and that manual intervention is required. Examples
+of terminal errors would be invalid combinations of settings in the
+spec, values that are unsupported by the controller, or the
+responsible controller itself being critically misconfigured.</p>
+<p>Any transient errors that occur during the reconciliation of Machines
+can be added as events to the Machine object and/or logged in the
+controller&rsquo;s output.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplate">MetalMachineTemplate
 </h3>
 <div>
