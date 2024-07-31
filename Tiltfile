@@ -22,7 +22,7 @@ settings = {
     "cert_manager_version": "v1.14.4",
     "kubernetes_version": "v1.29.4",
     "metal_image": "ghcr.io/ironcore-dev/metal-operator-controller-manager:latest",
-    "extra_args": {
+    "new_args": {
         "metal": [
         "--health-probe-bind-address=:8081",
         "--metrics-bind-address=127.0.0.1:8080",
@@ -30,6 +30,19 @@ settings = {
         "--probe-image=ghcr.io/ironcore-dev/metalprobe:latest",
         "--probe-os-image=ghcr.io/ironcore-dev/os-images/gardenlinux:1443",
         "--registry-url=http://0.0.0.0:30010"
+        ],
+        "kubeadm-controlplane": [
+        "--leader-elect",
+        "--diagnostics-address=:8443",
+        "--insecure-diagnostics=false",
+        "--feature-gates=MachinePool=false,KubeadmBootstrapFormatIgnition=true",
+        ],
+        "kubeadm-bootstrap": [
+        "--leader-elect",
+        "--diagnostics-address=:8443",
+        "--insecure-diagnostics=false",
+        "--feature-gates=MachinePool=false,KubeadmBootstrapFormatIgnition=true",
+        "--bootstrap-token-ttl=15m"
         ]
     }
 }
@@ -67,6 +80,17 @@ def deploy_capi():
             if kb_extra_args:
                 patch_args_with_extra_args("capi-kubeadm-bootstrap-system", "capi-kubeadm-bootstrap-controller-manager", kb_extra_args)
 
+    if settings.get("new_args"):
+        new_args = settings.get("new_args")
+        if new_args.get("kubeadm-controlplane"):
+            kcp_new_args = new_args.get("kubeadm-controlplane")
+            if kcp_new_args:
+                replace_args_with_new_args("capi-kubeadm-control-plane-system", "capi-kubeadm-control-plane-controller-manager", kcp_new_args)
+        if new_args.get("kubeadm-bootstrap"):
+            kb_new_args = new_args.get("kubeadm-bootstrap")
+            if kb_new_args:
+                replace_args_with_new_args("capi-kubeadm-bootstrap-system", "capi-kubeadm-bootstrap-controller-manager", kb_new_args)
+
 # deploy metal-operator
 def deploy_metal():
     version = settings.get("metal_version")
@@ -75,13 +99,13 @@ def deploy_metal():
     cmd = "{} build {} | {} | {} apply -f -".format(kustomize_cmd, metal_uri, envsubst_cmd, kubectl_cmd)
     local(cmd, quiet=True)
 
-    if settings.get("extra_args"):
-        extra_args = settings.get("extra_args")
-        if extra_args.get("metal"):
-            metal_extra_args = extra_args.get("metal")
-            if metal_extra_args:
+    if settings.get("new_args"):
+        new_args = settings.get("new_args")
+        if new_args.get("metal"):
+            metal_new_args = new_args.get("metal")
+            if metal_new_args:
                 for namespace in ["metal-operator-system"]:
-                    replace_args_with_extra_args(namespace, "metal-operator-controller-manager", metal_extra_args)
+                    replace_args_with_new_args(namespace, "metal-operator-controller-manager", metal_new_args)
 
     patch_image("metal-operator-system", "metal-operator-controller-manager", image)
 
@@ -106,7 +130,7 @@ def patch_args_with_extra_args(namespace, name, extra_args):
         }]
         local("kubectl patch deployment {} -n {} --type json -p='{}'".format(name, namespace, str(encode_json(patch)).replace("\n", "")))
 
-def replace_args_with_extra_args(namespace, name, extra_args):
+def replace_args_with_new_args(namespace, name, extra_args):
     patch = [{
         "op": "replace",
         "path": "/spec/template/spec/containers/0/args",
