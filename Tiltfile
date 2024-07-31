@@ -2,6 +2,7 @@
 
 envsubst_cmd = "./bin/envsubst"
 kubectl_cmd = "./bin/kubectl"
+kustomize_cmd = "./bin/kustomize"
 helm_cmd = "./bin/helm"
 tools_bin = "./bin"
 
@@ -20,6 +21,17 @@ settings = {
     "capi_version": "v1.6.4",
     "cert_manager_version": "v1.14.4",
     "kubernetes_version": "v1.29.4",
+    "metal_image": "ghcr.io/ironcore-dev/metal-operator-controller-manager:latest",
+    "extra_args": {
+        "metal": [
+        "--health-probe-bind-address=:8081",
+        "--metrics-bind-address=127.0.0.1:8080",
+        "--leader-elect",
+        "--probe-image=ghcr.io/ironcore-dev/metalprobe:latest",
+        "--probe-os-image=ghcr.io/ironcore-dev/os-images/gardenlinux:1443",
+        "--registry-url=http://0.0.0.0:30010"
+        ]
+    }
 }
 
 # global settings
@@ -55,6 +67,32 @@ def deploy_capi():
             if kb_extra_args:
                 patch_args_with_extra_args("capi-kubeadm-bootstrap-system", "capi-kubeadm-bootstrap-controller-manager", kb_extra_args)
 
+# deploy metal-operator
+def deploy_metal():
+    version = settings.get("metal_version")
+    image = settings.get("metal_image")
+    metal_uri = "https://github.com/ironcore-dev/metal-operator//config/dev"
+    cmd = "{} build {} | {} | {} apply -f -".format(kustomize_cmd, metal_uri, envsubst_cmd, kubectl_cmd)
+    local(cmd, quiet=True)
+
+    if settings.get("extra_args"):
+        extra_args = settings.get("extra_args")
+        if extra_args.get("metal"):
+            metal_extra_args = extra_args.get("metal")
+            if metal_extra_args:
+                for namespace in ["metal-operator-system"]:
+                    replace_args_with_extra_args(namespace, "metal-operator-controller-manager", metal_extra_args)
+
+    patch_image("metal-operator-system", "metal-operator-controller-manager", image)
+
+def patch_image(namespace, name, image):
+    patch = [{
+        "op": "replace",
+        "path": "/spec/template/spec/containers/0/image",
+        "value": image,
+    }]
+    local("kubectl patch deployment {} -n {} --type json -p='{}'".format(name, namespace, str(encode_json(patch)).replace("\n", "")))
+
 def patch_args_with_extra_args(namespace, name, extra_args):
     args_str = str(local('kubectl get deployments {} -n {} -o jsonpath={{.spec.template.spec.containers[1].args}}'.format(name, namespace)))
     args_to_add = [arg for arg in extra_args if arg not in args_str]
@@ -68,6 +106,13 @@ def patch_args_with_extra_args(namespace, name, extra_args):
         }]
         local("kubectl patch deployment {} -n {} --type json -p='{}'".format(name, namespace, str(encode_json(patch)).replace("\n", "")))
 
+def replace_args_with_extra_args(namespace, name, extra_args):
+    patch = [{
+        "op": "replace",
+        "path": "/spec/template/spec/containers/0/args",
+        "value": extra_args,
+    }]
+    local("kubectl patch deployment {} -n {} --type json -p='{}'".format(name, namespace, str(encode_json(patch)).replace("\n", "")))
 
 # Users may define their own Tilt customizations in tilt.d. This directory is excluded from git and these files will
 # not be checked in to version control.
@@ -198,6 +243,8 @@ include_user_tilt_files()
 deploy_cert_manager()
 
 deploy_capi()
+
+deploy_metal()
 
 capm()
 
