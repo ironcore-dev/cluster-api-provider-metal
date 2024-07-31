@@ -233,17 +233,18 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 		return ctrl.Result{}, err
 	}
 
-	machineScope.Info("Patching ProviderID in MetalMachine")
-	if err := r.patchMetalMachineProviderID(ctx, machineScope.Logger, machineScope.MetalMachine, serverClaim); err != nil {
-		machineScope.Error(err, "failed to patch the MetalMachine with providerid")
-		return ctrl.Result{}, err
-	}
-
-	if serverClaim.Status.Phase != metalv1alpha1.PhaseBound {
+	bound, _ := r.ensureServerClaimBound(ctx, serverClaim)
+	if !bound {
 		machineScope.Info("Waiting for ServerClaim to be Bound")
 		return ctrl.Result{
 			RequeueAfter: infrav1alpha1.DefaultReconcilerRequeue,
 		}, nil
+	}
+
+	machineScope.Info("Patching ProviderID in MetalMachine")
+	if err := r.patchMetalMachineProviderID(ctx, machineScope.Logger, machineScope.MetalMachine, serverClaim); err != nil {
+		machineScope.Error(err, "failed to patch the MetalMachine with providerid")
+		return ctrl.Result{}, err
 	}
 
 	machineScope.SetReady()
@@ -350,4 +351,16 @@ func (r *MetalMachineReconciler) patchMetalMachineProviderID(ctx context.Context
 
 	log.Info("Successfully patched MetalMachine with ProviderID", "ProviderID", providerID)
 	return nil
+}
+
+func (r *MetalMachineReconciler) ensureServerClaimBound(ctx context.Context, serverClaim *metalv1alpha1.ServerClaim) (bool, error) {
+	claimObj := &metalv1alpha1.ServerClaim{}
+	if err := r.Get(ctx, client.ObjectKeyFromObject(serverClaim), claimObj); err != nil {
+		return false, err
+	}
+
+	if claimObj.Status.Phase != metalv1alpha1.PhaseBound {
+		return false, nil
+	}
+	return true, nil
 }
