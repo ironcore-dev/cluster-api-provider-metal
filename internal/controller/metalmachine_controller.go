@@ -297,8 +297,7 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 			IgnitionSecretRef: &corev1.LocalObjectReference{
 				Name: ignitionsecret.Name,
 			},
-			// TODO: Allow configuring os-image.
-			Image: "ghcr.io/ironcore-dev/os-images/gardenlinux:1443.3",
+			Image: metalmachine.Spec.Image,
 		},
 	}
 

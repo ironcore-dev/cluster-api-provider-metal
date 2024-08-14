@@ -11,3 +11,4 @@ spec:
       serverSelector:
         matchLabels:
           server: metal
+      image: ghcr.io/ironcore-dev/os-images/gardenlinux:1443.3

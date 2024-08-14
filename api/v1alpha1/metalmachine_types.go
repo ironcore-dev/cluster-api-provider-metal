@@ -26,6 +26,9 @@ type MetalMachineSpec struct {
 	// +optional
 	ProviderID *string `json:"providerID,omitempty"`
 
+	// Image specifies the boot image to be used for the server.
+	Image string `json:"image"`
+
 	// ServerSelector specifies matching criteria for labels on Servers.
 	// This is used to claim specific Server types for a MetalMachine.
 	// +optional
