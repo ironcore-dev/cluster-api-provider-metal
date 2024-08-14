@@ -71,6 +71,10 @@ spec:
                   spec:
                     description: MetalMachineSpec defines the desired state of MetalMachine
                     properties:
+                      image:
+                        description: Image specifies the boot image to be used for
+                          the server.
+                        type: string
                       providerID:
                         description: ProviderID is the unique identifier as specified
                           by the cloud provider.
@@ -87,6 +91,8 @@ spec:
                               on a chosen Server
                             type: object
                         type: object
+                    required:
+                    - image
                     type: object
                 required:
                 - spec
