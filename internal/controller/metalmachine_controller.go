@@ -328,17 +328,7 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 }
 
 func (r *MetalMachineReconciler) patchMetalMachineProviderID(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, serverClaim *metalv1alpha1.ServerClaim) error {
-	server := &metalv1alpha1.Server{}
-	serverRefName := types.NamespacedName{
-		Name: serverClaim.Spec.ServerRef.Name,
-	}
-
-	if err := r.Client.Get(ctx, serverRefName, server); err != nil {
-		log.Error(err, "failed to fetch server associated with the server claim")
-		return err
-	}
-
-	providerID := fmt.Sprintf("metal:///%s/%s/%s", serverClaim.Namespace, serverClaim.Name, server.Spec.UUID)
+	providerID := fmt.Sprintf("metal:///%s/%s", serverClaim.Namespace, serverClaim.Name)
 
 	patch := client.MergeFrom(metalmachine.DeepCopy())
 	metalmachine.Spec.ProviderID = &providerID
