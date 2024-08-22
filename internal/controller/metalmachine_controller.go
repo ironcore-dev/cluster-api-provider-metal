@@ -328,7 +328,7 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 }
 
 func (r *MetalMachineReconciler) patchMetalMachineProviderID(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, serverClaim *metalv1alpha1.ServerClaim) error {
-	providerID := fmt.Sprintf("metal:///%s/%s", serverClaim.Namespace, serverClaim.Name)
+	providerID := fmt.Sprintf("metal://%s/%s", serverClaim.Namespace, serverClaim.Name)
 
 	patch := client.MergeFrom(metalmachine.DeepCopy())
 	metalmachine.Spec.ProviderID = &providerID
