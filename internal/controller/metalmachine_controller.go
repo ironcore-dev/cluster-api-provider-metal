@@ -297,22 +297,10 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 			IgnitionSecretRef: &corev1.LocalObjectReference{
 				Name: ignitionsecret.Name,
 			},
-			Image: metalmachine.Spec.Image,
+			Image:          metalmachine.Spec.Image,
+			ServerSelector: metalmachine.Spec.ServerSelector,
 		},
 	}
-
-	// TODO: Define proper contract for ServerSelectors.
-	serverSelector := metav1.LabelSelector{
-		MatchLabels: map[string]string{
-			"clusterapi-workload": "",
-		},
-	}
-	if _, exists := metalmachine.Labels["cluster.x-k8s.io/control-plane"]; exists {
-		serverSelector.MatchLabels = map[string]string{
-			"clusterapi-controlplane": "",
-		}
-	}
-	serverClaimObj.Spec.ServerSelector = &serverSelector
 
 	if err := controllerutil.SetControllerReference(metalmachine, serverClaimObj, r.Client.Scheme()); err != nil {
 		return nil, fmt.Errorf("failed to set ControllerReference: %w", err)

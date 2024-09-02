@@ -205,10 +205,21 @@ string
 </tr>
 <tr>
 <td>
+<code>image</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Image specifies the boot image to be used for the server.</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>serverSelector</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.ServerSelector">
-ServerSelector
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#labelselector-v1-meta">
+Kubernetes meta/v1.LabelSelector
 </a>
 </em>
 </td>
@@ -265,10 +276,21 @@ string
 </tr>
 <tr>
 <td>
+<code>image</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Image specifies the boot image to be used for the server.</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>serverSelector</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.ServerSelector">
-ServerSelector
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#labelselector-v1-meta">
+Kubernetes meta/v1.LabelSelector
 </a>
 </em>
 </td>
@@ -475,10 +497,21 @@ string
 </tr>
 <tr>
 <td>
+<code>image</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Image specifies the boot image to be used for the server.</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>serverSelector</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.ServerSelector">
-ServerSelector
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#labelselector-v1-meta">
+Kubernetes meta/v1.LabelSelector
 </a>
 </em>
 </td>
@@ -519,37 +552,6 @@ MetalMachineTemplateResource
 </em>
 </td>
 <td>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.ServerSelector">ServerSelector
-</h3>
-<p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineSpec">MetalMachineSpec</a>)
-</p>
-<div>
-<p>ServerSelector specifies matching criteria for labels on Server.
-This is used to claim specific Server types for a Machine</p>
-</div>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>matchLabels</code><br/>
-<em>
-map[string]string
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>Key/value pairs of labels that must exist on a chosen Server</p>
 </td>
 </tr>
 </tbody>
