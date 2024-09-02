@@ -32,7 +32,7 @@ type MetalMachineSpec struct {
 	// ServerSelector specifies matching criteria for labels on Servers.
 	// This is used to claim specific Server types for a MetalMachine.
 	// +optional
-	ServerSelector ServerSelector `json:"serverSelector,omitempty"`
+	ServerSelector *metav1.LabelSelector `json:"serverSelector,omitempty"`
 }
 
 // MetalMachineStatus defines the observed state of MetalMachine
