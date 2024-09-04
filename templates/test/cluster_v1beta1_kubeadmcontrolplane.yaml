@@ -40,6 +40,5 @@ spec:
                 [TEST]
                 test=1
     preKubeadmCommands:
-    - envsubst < /etc/kubeadm.yml > /etc/kubeadm.yml.tmp
-    - mv /etc/kubeadm.yml.tmp /etc/kubeadm.yml
+    - hostnamectl set-hostname $${METAL_HOSTNAME}
   version: 1.29.4
