@@ -6,6 +6,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/go-logr/logr"
 	"github.com/ironcore-dev/cluster-api-provider-metal/internal/scope"
@@ -220,7 +221,7 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 	}
 
 	machineScope.Info("Creating IgnitionSecret", "Secret", machineScope.MetalMachine.Name)
-	ignitionSecret, err := r.applyIgnitionSecret(ctx, machineScope.Logger, bootstrapSecret)
+	ignitionSecret, err := r.applyIgnitionSecret(ctx, machineScope.Logger, machineScope.MetalMachine, bootstrapSecret)
 	if err != nil {
 		machineScope.Error(err, "failed to create or patch ignition secret")
 		return ctrl.Result{}, err
@@ -253,7 +254,10 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 	return reconcile.Result{}, nil
 }
 
-func (r *MetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *logr.Logger, capidatasecret *corev1.Secret) (*corev1.Secret, error) {
+func (r *MetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, capidatasecret *corev1.Secret) (*corev1.Secret, error) {
+	dataSecret := capidatasecret
+	findAndReplaceIgnition(metalmachine, dataSecret)
+
 	secretObj := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("ignition-%s", capidatasecret.Name),
@@ -264,8 +268,7 @@ func (r *MetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *l
 			APIVersion: corev1.SchemeGroupVersion.String(),
 		},
 		Data: map[string][]byte{
-			// TODO: Make Metal Specific changes in the Ignition if necessary
-			DefaultIgnitionSecretKeyName: capidatasecret.Data["value"],
+			DefaultIgnitionSecretKeyName: dataSecret.Data["value"],
 		},
 	}
 
@@ -340,4 +343,14 @@ func (r *MetalMachineReconciler) ensureServerClaimBound(ctx context.Context, ser
 		return false, nil
 	}
 	return true, nil
+}
+
+func findAndReplaceIgnition(metalmachine *infrav1alpha1.MetalMachine, capidatasecret *corev1.Secret) {
+	data := capidatasecret.Data["value"]
+
+	// replace $${METAL_HOSTNAME} with machine name
+	hostname := "%24%24%7BMETAL_HOSTNAME%7D"
+	modifiedData := strings.ReplaceAll(string(data), hostname, metalmachine.Name)
+
+	capidatasecret.Data["value"] = []byte(modifiedData)
 }
