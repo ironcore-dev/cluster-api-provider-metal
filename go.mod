@@ -1,12 +1,11 @@
 module github.com/ironcore-dev/cluster-api-provider-metal
 
 go 1.22.0
-
 toolchain go1.22.5
 
 require (
 	github.com/go-logr/logr v1.4.2
-	github.com/ironcore-dev/controller-utils v0.9.3
+	github.com/ironcore-dev/controller-utils v0.9.4
 	github.com/ironcore-dev/metal-operator v0.0.0-20240723113059-17e10339810f
 	github.com/onsi/ginkgo/v2 v2.20.2
 	github.com/onsi/gomega v1.34.2
