@@ -83,8 +83,8 @@ github.com/huandu/xstrings v1.3.3 h1:/Gcsuc1x8JVbJ9/rlye4xZnVAbEkGauT8lbebqcQws4
 github.com/huandu/xstrings v1.3.3/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
 github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
-github.com/ironcore-dev/controller-utils v0.9.3 h1:sTrnxSzX5RrLf4B8KrAH2axSC+gxfJXphkV6df2GSsw=
-github.com/ironcore-dev/controller-utils v0.9.3/go.mod h1:djKnxDs0Hwxhhc0VmVY8tZnrOrElvrRV2jov/LiCZ2Y=
+github.com/ironcore-dev/controller-utils v0.9.4 h1:l+lXzDyTfDEvAn0o9KOX0JdeTf6uI0VKN9yVnl9jLM4=
+github.com/ironcore-dev/controller-utils v0.9.4/go.mod h1:0MS4W51EAEQo/nfajSaCj4RClju4MXv6IFGb+nDv2AA=
 github.com/ironcore-dev/metal-operator v0.0.0-20240723113059-17e10339810f h1:FeavQ1QSA1RQdz4Fup6KTj7nXAROBn1Fzviu5MzfOP0=
 github.com/ironcore-dev/metal-operator v0.0.0-20240723113059-17e10339810f/go.mod h1:u0x9uFC6MgN5c6mYqJ/QgTLSjUPHsGTKTN/jjsG9JnY=
 github.com/josharian/intern v1.0.0 h1:vlS4z54oSdjm0bgjRigI+G1HpF+tI+9rE5LLzOg8HmY=
@@ -118,8 +118,9 @@ github.com/opencontainers/go-digest v1.0.0 h1:apOUWs51W5PlhuyGyz9FCeeBIOUDA/6nW8
 github.com/opencontainers/go-digest v1.0.0/go.mod h1:0JzlMkj0TRzQZfJkVvzbP0HBR3IKzErnv2BNG4W4MAM=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
-github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
+github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_golang v1.19.1 h1:wZWJDwK+NameRJuPGDhlnFgx8e8HN3XHQeLaYJFJBOE=
 github.com/prometheus/client_golang v1.19.1/go.mod h1:mP78NwGzrVks5S2H6ab8+ZZGJLZUq1hoULYBAYBw1Ho=
 github.com/prometheus/client_model v0.6.1 h1:ZKSh/rekM+n3CeS952MLRAdFwIKqeY8b62p8ais2e9E=
