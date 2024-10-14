@@ -1,7 +1,7 @@
 # Image URL to use all building/pushing image targets
 IMG ?= controller:latest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
-ENVTEST_K8S_VERSION = 1.30.0
+ENVTEST_K8S_VERSION = 1.31.0
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -176,12 +176,12 @@ GEN_CRD_API_REFERENCE_DOCS ?= $(LOCALBIN)/gen-crd-api-reference-docs-$(GEN_CRD_A
 
 ## Tool Versions
 KUSTOMIZE_VERSION ?= v5.4.1
-KUBECTL_VERSION ?= v1.29.4
+KUBECTL_VERSION ?= v1.31.1
 HELM_VERSION ?= v3.15.3
 CONTROLLER_TOOLS_VERSION ?= v0.15.0
 ENVTEST_VERSION ?= release-0.18
 ENVSUBST_VER := v1.2.0
-GOLANGCI_LINT_VERSION ?= v1.57.2
+GOLANGCI_LINT_VERSION ?= v1.61.0
 GEN_CRD_API_REFERENCE_DOCS_VERSION ?= v0.3.0
 
 # Directiries.
