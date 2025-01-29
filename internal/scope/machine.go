@@ -12,7 +12,6 @@ import (
 	"github.com/pkg/errors"
 	"k8s.io/utils/ptr"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
-	capierrors "sigs.k8s.io/cluster-api/errors"
 	"sigs.k8s.io/cluster-api/util/patch"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
@@ -98,13 +97,13 @@ func (m *MachineScope) SetFailureMessage(v error) {
 }
 
 // SetFailureReason sets the MetalMachine status failure reason.
-func (m *MachineScope) SetFailureReason(v capierrors.MachineStatusError) {
-	m.MetalMachine.Status.FailureReason = &v
+func (m *MachineScope) SetFailureReason(v string) {
+	m.MetalMachine.Status.FailureReason = v
 }
 
 // HasFailed returns the failure state of the machine scope.
 func (m *MachineScope) HasFailed() bool {
-	return m.MetalMachine.Status.FailureReason != nil || m.MetalMachine.Status.FailureMessage != nil
+	return m.MetalMachine.Status.FailureReason != "" || m.MetalMachine.Status.FailureMessage != nil
 }
 
 // PatchObject persists the Machine configuration and status.
