@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
-	"github.com/ironcore-dev/cluster-api-provider-metal/internal/scope"
+	"github.com/ironcore-dev/cluster-api-provider-ironcore-metal/internal/scope"
 	"github.com/ironcore-dev/controller-utils/clientutils"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
@@ -30,7 +30,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	infrav1alpha1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
+	infrav1alpha1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
 	metalv1alpha1 "github.com/ironcore-dev/metal-operator/api/v1alpha1"
 )
 

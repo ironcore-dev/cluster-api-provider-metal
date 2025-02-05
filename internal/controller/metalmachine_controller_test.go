@@ -14,7 +14,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	infrav1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
+	infrav1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
 )
 
 var _ = Describe("MetalMachine Controller", func() {

@@ -25,8 +25,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	infrastructurev1alpha1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
-	"github.com/ironcore-dev/cluster-api-provider-metal/internal/controller"
+	infrastructurev1alpha1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
+	"github.com/ironcore-dev/cluster-api-provider-ironcore-metal/internal/controller"
 	metalv1alpha1 "github.com/ironcore-dev/metal-operator/api/v1alpha1"
 	// +kubebuilder:scaffold:imports
 )

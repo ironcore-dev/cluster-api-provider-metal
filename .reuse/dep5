@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: cluster-api-provider-metal
+Upstream-Name: cluster-api-provider-ironcore-metal
 Upstream-Contact: IronCore authors <ospo@sap.com>
-Source: https://github.com/ironcore-dev/cluster-api-provider-metal
+Source: https://github.com/ironcore-dev/cluster-api-provider-ironcore-metal
 
 # --------------------------------------------------
 # source code
