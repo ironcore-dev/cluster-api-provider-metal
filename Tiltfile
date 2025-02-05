@@ -189,7 +189,7 @@ def capm():
         extra_args = settings.get("extra_args").get("do")
         if extra_args:
             yaml_dict = decode_yaml_stream(yaml)
-            append_arg_for_container_in_deployment(yaml_dict, "capm-controller-manager", "capm-system", "cluster-api-metal-controller", extra_args)
+            append_arg_for_container_in_deployment(yaml_dict, "capm-controller-manager", "capm-system", "cluster-api-ironcore-metal-controller", extra_args)
             yaml = str(encode_yaml_stream(yaml_dict))
             yaml = fixup_yaml_empty_arrays(yaml)
 
