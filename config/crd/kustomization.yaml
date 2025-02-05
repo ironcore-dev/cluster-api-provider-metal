@@ -3,8 +3,8 @@
 # It should be run by config/default
 resources:
 - bases/infrastructure.cluster.x-k8s.io_metalclusters.yaml
-- bases/infrastructure.cluster.x-k8s.io_metalmachines.yaml
-- bases/infrastructure.cluster.x-k8s.io_metalmachinetemplates.yaml
+- bases/infrastructure.cluster.x-k8s.io_ironcoremetalmachines.yaml
+- bases/infrastructure.cluster.x-k8s.io_ironcoremetalmachinetemplates.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 commonLabels:
@@ -18,8 +18,8 @@ commonLabels:
 # [CERTMANAGER] To enable cert-manager, uncomment all the sections with [CERTMANAGER] prefix.
 # patches here are for enabling the CA injection for each CRD
 #- path: patches/cainjection_in_metalclusters.yaml
-#- path: patches/cainjection_in_metalmachines.yaml
-#- path: patches/cainjection_in_metalmachinetemplates.yaml
+#- path: patches/cainjection_in_ironcoremetalmachines.yaml
+#- path: patches/cainjection_in_ironcoremetalmachinetemplates.yaml
 # +kubebuilder:scaffold:crdkustomizecainjectionpatch
 
 # [WEBHOOK] To enable webhook, uncomment the following section

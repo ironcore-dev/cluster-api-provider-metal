@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: metalmachinetemplates.metal.ironcore.dev
+  name: ironcoremetalmachinetemplates.metal.ironcore.dev
 spec:
   group: metal.ironcore.dev
   names:
-    kind: MetalMachineTemplate
-    listKind: MetalMachineTemplateList
-    plural: metalmachinetemplates
-    singular: metalmachinetemplate
+    kind: IroncoreMetalMachineTemplate
+    listKind: IroncoreMetalMachineTemplateList
+    plural: ironcoremetalmachinetemplates
+    singular: ironcoremetalmachinetemplate
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MetalMachineTemplate is the Schema for the metalmachinetemplates
+        description: IroncoreMetalMachineTemplate is the Schema for the ironcoremetalmachinetemplates
           API
         properties:
           apiVersion:
@@ -38,11 +38,11 @@ spec:
           metadata:
             type: object
           spec:
-            description: MetalMachineTemplateSpec defines the desired state of MetalMachineTemplate
+            description: IroncoreMetalMachineTemplateSpec defines the desired state of IroncoreMetalMachineTemplate
             properties:
               template:
-                description: MetalMachineTemplateResource defines the spec and metadata
-                  for MetalMachineTemplate supported by capi.
+                description: IroncoreMetalMachineTemplateResource defines the spec and metadata
+                  for IroncoreMetalMachineTemplate supported by capi.
                 properties:
                   metadata:
                     description: |-
@@ -69,7 +69,7 @@ spec:
                         type: object
                     type: object
                   spec:
-                    description: MetalMachineSpec defines the desired state of MetalMachine
+                    description: IroncoreMetalMachineSpec defines the desired state of IroncoreMetalMachine
                     properties:
                       providerID:
                         description: ProviderID is the unique identifier as specified
@@ -78,7 +78,7 @@ spec:
                       serverSelector:
                         description: |-
                           ServerSelector specifies matching criteria for labels on Servers.
-                          This is used to claim specific Server types for a MetalMachine.
+                          This is used to claim specific Server types for a IroncoreMetalMachine.
                         properties:
                           matchLabels:
                             additionalProperties:

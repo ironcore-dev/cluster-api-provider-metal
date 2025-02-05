@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: metalmachines.metal.ironcore.dev
+  name: ironcoremetalmachines.metal.ironcore.dev
 spec:
   group: metal.ironcore.dev
   names:
-    kind: MetalMachine
-    listKind: MetalMachineList
-    plural: metalmachines
-    singular: metalmachine
+    kind: IroncoreMetalMachine
+    listKind: IroncoreMetalMachineList
+    plural: ironcoremetalmachines
+    singular: ironcoremetalmachine
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MetalMachine is the Schema for the metalmachines API
+        description: IroncoreMetalMachine is the Schema for the ironcoremetalmachines API
         properties:
           apiVersion:
             description: |-
@@ -37,7 +37,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: MetalMachineSpec defines the desired state of MetalMachine
+            description: IroncoreMetalMachineSpec defines the desired state of IroncoreMetalMachine
             properties:
               providerID:
                 description: ProviderID is the unique identifier as specified by the
@@ -46,7 +46,7 @@ spec:
               serverSelector:
                 description: |-
                   ServerSelector specifies matching criteria for labels on Servers.
-                  This is used to claim specific Server types for a MetalMachine.
+                  This is used to claim specific Server types for a IroncoreMetalMachine.
                 properties:
                   matchLabels:
                     additionalProperties:
@@ -57,7 +57,7 @@ spec:
                 type: object
             type: object
           status:
-            description: MetalMachineStatus defines the observed state of MetalMachine
+            description: IroncoreMetalMachineStatus defines the observed state of IroncoreMetalMachine
             type: object
         type: object
     served: true

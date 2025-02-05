@@ -1,9 +1,9 @@
 apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
-kind: MetalMachine
+kind: IroncoreMetalMachine
 metadata:
   labels:
     app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalmachine-sample
+  name: ironcoremetalmachine-sample
 spec:
   # TODO(user): Add fields here

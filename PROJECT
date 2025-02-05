@@ -23,7 +23,7 @@ resources:
   controller: true
   domain: cluster.x-k8s.io
   group: infrastructure
-  kind: MetalMachine
+  kind: IroncoreMetalMachine
   path: github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1
   version: v1alpha1
 - api:
@@ -31,7 +31,7 @@ resources:
     namespaced: true
   domain: cluster.x-k8s.io
   group: infrastructure
-  kind: MetalMachineTemplate
+  kind: IroncoreMetalMachineTemplate
   path: github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1
   version: v1alpha1
 version: "3"

@@ -290,10 +290,10 @@ k8s_resource(
     auto_init=False
 )
 
-k8s_yaml('./config/samples/infrastructure_v1alpha1_metalmachinetemplate.yaml')
+k8s_yaml('./config/samples/infrastructure_v1alpha1_ironcoremetalmachinetemplate.yaml')
 k8s_resource(
-    objects=['metalmachinetemplate-sample-control-plane:metalmachinetemplate'],
-    new_name='metalmachinetemplate-sample-control-plane',
+    objects=['ironcoremetalmachinetemplate-sample-control-plane:ironcoremetalmachinetemplate'],
+    new_name='ironcoremetalmachinetemplate-sample-control-plane',
     trigger_mode=TRIGGER_MODE_MANUAL,
     auto_init=False
 )

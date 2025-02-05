@@ -34,20 +34,20 @@ import (
 	metalv1alpha1 "github.com/ironcore-dev/metal-operator/api/v1alpha1"
 )
 
-// MetalMachineReconciler reconciles a MetalMachine object
-type MetalMachineReconciler struct {
+// IroncoreMetalMachineReconciler reconciles a IroncoreMetalMachine object
+type IroncoreMetalMachineReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
 const (
-	MetalMachineFinalizer        = "infrastructure.cluster.x-k8s.io/metalmachine"
-	DefaultIgnitionSecretKeyName = "ignition"
+	IroncoreMetalMachineFinalizer = "infrastructure.cluster.x-k8s.io/ironcoremetalmachine"
+	DefaultIgnitionSecretKeyName  = "ignition"
 )
 
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalmachines,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalmachines/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalmachines/finalizers,verbs=update
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalmachines,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalmachines/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalmachines/finalizers,verbs=update
 // +kubebuilder:rbac:groups=cluster.x-k8s.io,resources=machines;machines/status,verbs=get;list;watch
 // +kubebuilder:rbac:groups=cluster.x-k8s.io,resources=machinedeployments,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=cluster.x-k8s.io,resources=machinesets,verbs=get;list;watch
@@ -56,11 +56,11 @@ const (
 // +kubebuilder:rbac:groups="",resources=events,verbs=get;list;watch;create;update;patch
 // +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch;create;update;patch;delete
 
-func (r *MetalMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *IroncoreMetalMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
 
-	// Fetch the MetalMachine.
-	metalMachine := &infrav1alpha1.MetalMachine{}
+	// Fetch the IroncoreMetalMachine.
+	metalMachine := &infrav1alpha1.IroncoreMetalMachine{}
 	err := r.Get(ctx, req.NamespacedName, metalMachine)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
@@ -89,7 +89,7 @@ func (r *MetalMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request
 	}
 
 	if annotations.IsPaused(cluster, metalMachine) {
-		logger.Info("MetalMachine or linked Cluster is marked as paused, not reconciling")
+		logger.Info("IroncoreMetalMachine or linked Cluster is marked as paused, not reconciling")
 		return ctrl.Result{}, nil
 	}
 
@@ -124,28 +124,28 @@ func (r *MetalMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request
 
 	// Create the machine scope
 	machineScope, err := scope.NewMachineScope(scope.MachineScopeParams{
-		Client:       r.Client,
-		Cluster:      cluster,
-		Machine:      machine,
-		MetalCluster: metalCluster,
-		MetalMachine: metalMachine,
+		Client:               r.Client,
+		Cluster:              cluster,
+		Machine:              machine,
+		MetalCluster:         metalCluster,
+		IroncoreMetalMachine: metalMachine,
 	})
 
 	if err != nil {
 		return reconcile.Result{}, errors.Errorf("failed to create machine scope: %+v", err)
 	}
 
-	// Always close the scope when exiting this function, so we can persist any MetalMachine changes.
+	// Always close the scope when exiting this function, so we can persist any IroncoreMetalMachine changes.
 	// TODO: revisit side effects of closure errors
 	defer func() {
 		if err := machineScope.Close(); err != nil {
-			logger.Error(err, "failed to close MetalMachine scope")
+			logger.Error(err, "failed to close IroncoreMetalMachine scope")
 		}
 	}()
 
 	// Return early if the object or Cluster is paused.
 	if annotations.IsPaused(cluster, metalMachine) {
-		logger.Info("MetalMachine or linked Cluster is marked as paused. Won't reconcile normally")
+		logger.Info("IroncoreMetalMachine or linked Cluster is marked as paused. Won't reconcile normally")
 		return reconcile.Result{}, nil
 	}
 
@@ -159,22 +159,22 @@ func (r *MetalMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *MetalMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *IroncoreMetalMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&infrav1alpha1.MetalMachine{}).
+		For(&infrav1alpha1.IroncoreMetalMachine{}).
 		Watches(
 			&clusterapiv1beta1.Machine{},
-			handler.EnqueueRequestsFromMapFunc(util.MachineToInfrastructureMapFunc(infrav1alpha1.GroupVersion.WithKind("MetalMachine"))),
+			handler.EnqueueRequestsFromMapFunc(util.MachineToInfrastructureMapFunc(infrav1alpha1.GroupVersion.WithKind("IroncoreMetalMachine"))),
 		).
 		Complete(r)
 }
 
-func (r *MetalMachineReconciler) reconcileDelete(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) {
-	machineScope.Logger.Info("Deleting MetalMachine")
+func (r *IroncoreMetalMachineReconciler) reconcileDelete(ctx context.Context, machineScope *scope.MachineScope) (ctrl.Result, error) {
+	machineScope.Logger.Info("Deleting IroncoreMetalMachine")
 
 	// insert ServerClaim deletion logic here
 
-	if modified, err := clientutils.PatchEnsureNoFinalizer(ctx, r.Client, machineScope.MetalMachine, MetalMachineFinalizer); !apierrors.IsNotFound(err) || modified {
+	if modified, err := clientutils.PatchEnsureNoFinalizer(ctx, r.Client, machineScope.IroncoreMetalMachine, IroncoreMetalMachineFinalizer); !apierrors.IsNotFound(err) || modified {
 		return ctrl.Result{}, err
 	}
 	machineScope.Logger.Info("Ensured that the finalizer has been removed")
@@ -182,10 +182,10 @@ func (r *MetalMachineReconciler) reconcileDelete(ctx context.Context, machineSco
 	return reconcile.Result{RequeueAfter: infrav1alpha1.DefaultReconcilerRequeue}, nil
 }
 
-func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineScope *scope.MachineScope, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
-	clusterScope.Logger.V(4).Info("Reconciling MetalMachine")
+func (r *IroncoreMetalMachineReconciler) reconcileNormal(ctx context.Context, machineScope *scope.MachineScope, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
+	clusterScope.Logger.V(4).Info("Reconciling IroncoreMetalMachine")
 
-	// If the MetalMachine is in an error state, return early.
+	// If the IroncoreMetalMachine is in an error state, return early.
 	if machineScope.HasFailed() {
 		machineScope.Info("Error state detected, skipping reconciliation")
 		return ctrl.Result{}, nil
@@ -204,7 +204,7 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 		return ctrl.Result{}, nil
 	}
 
-	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, machineScope.MetalMachine, MetalMachineFinalizer); err != nil || modified {
+	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, machineScope.IroncoreMetalMachine, IroncoreMetalMachineFinalizer); err != nil || modified {
 		return ctrl.Result{}, err
 	}
 	machineScope.Logger.Info("Ensured finalizer has been added")
@@ -220,15 +220,15 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 		return ctrl.Result{}, err
 	}
 
-	machineScope.Info("Creating IgnitionSecret", "Secret", machineScope.MetalMachine.Name)
-	ignitionSecret, err := r.applyIgnitionSecret(ctx, machineScope.Logger, machineScope.MetalMachine, bootstrapSecret)
+	machineScope.Info("Creating IgnitionSecret", "Secret", machineScope.IroncoreMetalMachine.Name)
+	ignitionSecret, err := r.applyIgnitionSecret(ctx, machineScope.Logger, machineScope.IroncoreMetalMachine, bootstrapSecret)
 	if err != nil {
 		machineScope.Error(err, "failed to create or patch ignition secret")
 		return ctrl.Result{}, err
 	}
 
-	machineScope.Info("Creating ServerClaim", "ServerClaim", machineScope.MetalMachine.Name)
-	serverClaim, err := r.applyServerClaim(ctx, machineScope.Logger, machineScope.MetalMachine, ignitionSecret)
+	machineScope.Info("Creating ServerClaim", "ServerClaim", machineScope.IroncoreMetalMachine.Name)
+	serverClaim, err := r.applyServerClaim(ctx, machineScope.Logger, machineScope.IroncoreMetalMachine, ignitionSecret)
 	if err != nil {
 		machineScope.Error(err, "failed to create or patch ServerClaim")
 		return ctrl.Result{}, err
@@ -242,21 +242,21 @@ func (r *MetalMachineReconciler) reconcileNormal(ctx context.Context, machineSco
 		}, nil
 	}
 
-	machineScope.Info("Patching ProviderID in MetalMachine")
-	if err := r.patchMetalMachineProviderID(ctx, machineScope.Logger, machineScope.MetalMachine, serverClaim); err != nil {
-		machineScope.Error(err, "failed to patch the MetalMachine with providerid")
+	machineScope.Info("Patching ProviderID in IroncoreMetalMachine")
+	if err := r.patchIroncoreMetalMachineProviderID(ctx, machineScope.Logger, machineScope.IroncoreMetalMachine, serverClaim); err != nil {
+		machineScope.Error(err, "failed to patch the IroncoreMetalMachine with providerid")
 		return ctrl.Result{}, err
 	}
 
 	machineScope.SetReady()
-	machineScope.Logger.Info("MetalMachine is ready")
+	machineScope.Logger.Info("IroncoreMetalMachine is ready")
 
 	return reconcile.Result{}, nil
 }
 
-func (r *MetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, capidatasecret *corev1.Secret) (*corev1.Secret, error) {
+func (r *IroncoreMetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *logr.Logger, ironcoremetalmachine *infrav1alpha1.IroncoreMetalMachine, capidatasecret *corev1.Secret) (*corev1.Secret, error) {
 	dataSecret := capidatasecret
-	findAndReplaceIgnition(metalmachine, dataSecret)
+	findAndReplaceIgnition(ironcoremetalmachine, dataSecret)
 
 	secretObj := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -285,11 +285,11 @@ func (r *MetalMachineReconciler) applyIgnitionSecret(ctx context.Context, log *l
 	return secretObj, nil
 }
 
-func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, ignitionsecret *corev1.Secret) (*metalv1alpha1.ServerClaim, error) {
+func (r *IroncoreMetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr.Logger, ironcoremetalmachine *infrav1alpha1.IroncoreMetalMachine, ignitionsecret *corev1.Secret) (*metalv1alpha1.ServerClaim, error) {
 	serverClaimObj := &metalv1alpha1.ServerClaim{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      metalmachine.Name,
-			Namespace: metalmachine.Namespace,
+			Name:      ironcoremetalmachine.Name,
+			Namespace: ironcoremetalmachine.Namespace,
 		},
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: metalv1alpha1.GroupVersion.String(),
@@ -300,12 +300,12 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 			IgnitionSecretRef: &corev1.LocalObjectReference{
 				Name: ignitionsecret.Name,
 			},
-			Image:          metalmachine.Spec.Image,
-			ServerSelector: metalmachine.Spec.ServerSelector,
+			Image:          ironcoremetalmachine.Spec.Image,
+			ServerSelector: ironcoremetalmachine.Spec.ServerSelector,
 		},
 	}
 
-	if err := controllerutil.SetControllerReference(metalmachine, serverClaimObj, r.Client.Scheme()); err != nil {
+	if err := controllerutil.SetControllerReference(ironcoremetalmachine, serverClaimObj, r.Client.Scheme()); err != nil {
 		return nil, fmt.Errorf("failed to set ControllerReference: %w", err)
 	}
 
@@ -318,22 +318,22 @@ func (r *MetalMachineReconciler) applyServerClaim(ctx context.Context, log *logr
 	return serverClaimObj, nil
 }
 
-func (r *MetalMachineReconciler) patchMetalMachineProviderID(ctx context.Context, log *logr.Logger, metalmachine *infrav1alpha1.MetalMachine, serverClaim *metalv1alpha1.ServerClaim) error {
+func (r *IroncoreMetalMachineReconciler) patchIroncoreMetalMachineProviderID(ctx context.Context, log *logr.Logger, ironcoremetalmachine *infrav1alpha1.IroncoreMetalMachine, serverClaim *metalv1alpha1.ServerClaim) error {
 	providerID := fmt.Sprintf("metal://%s/%s", serverClaim.Namespace, serverClaim.Name)
 
-	patch := client.MergeFrom(metalmachine.DeepCopy())
-	metalmachine.Spec.ProviderID = &providerID
+	patch := client.MergeFrom(ironcoremetalmachine.DeepCopy())
+	ironcoremetalmachine.Spec.ProviderID = &providerID
 
-	if err := r.Client.Patch(ctx, metalmachine, patch); err != nil {
-		log.Error(err, "failed to patch MetalMachine with ProviderID")
+	if err := r.Client.Patch(ctx, ironcoremetalmachine, patch); err != nil {
+		log.Error(err, "failed to patch IroncoreMetalMachine with ProviderID")
 		return err
 	}
 
-	log.Info("Successfully patched MetalMachine with ProviderID", "ProviderID", providerID)
+	log.Info("Successfully patched IroncoreMetalMachine with ProviderID", "ProviderID", providerID)
 	return nil
 }
 
-func (r *MetalMachineReconciler) ensureServerClaimBound(ctx context.Context, serverClaim *metalv1alpha1.ServerClaim) (bool, error) {
+func (r *IroncoreMetalMachineReconciler) ensureServerClaimBound(ctx context.Context, serverClaim *metalv1alpha1.ServerClaim) (bool, error) {
 	claimObj := &metalv1alpha1.ServerClaim{}
 	if err := r.Get(ctx, client.ObjectKeyFromObject(serverClaim), claimObj); err != nil {
 		return false, err
@@ -345,12 +345,12 @@ func (r *MetalMachineReconciler) ensureServerClaimBound(ctx context.Context, ser
 	return true, nil
 }
 
-func findAndReplaceIgnition(metalmachine *infrav1alpha1.MetalMachine, capidatasecret *corev1.Secret) {
+func findAndReplaceIgnition(ironcoremetalmachine *infrav1alpha1.IroncoreMetalMachine, capidatasecret *corev1.Secret) {
 	data := capidatasecret.Data["value"]
 
 	// replace $${METAL_HOSTNAME} with machine name
 	hostname := "%24%24%7BMETAL_HOSTNAME%7D"
-	modifiedData := strings.ReplaceAll(string(data), hostname, metalmachine.Name)
+	modifiedData := strings.ReplaceAll(string(data), hostname, ironcoremetalmachine.Name)
 
 	capidatasecret.Data["value"] = []byte(modifiedData)
 }

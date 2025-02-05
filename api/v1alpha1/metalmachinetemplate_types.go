@@ -8,39 +8,39 @@ import (
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
 )
 
-// MetalMachineTemplateSpec defines the desired state of MetalMachineTemplate
-type MetalMachineTemplateSpec struct {
-	Template MetalMachineTemplateResource `json:"template"`
+// IroncoreMetalMachineTemplateSpec defines the desired state of IroncoreMetalMachineTemplate
+type IroncoreMetalMachineTemplateSpec struct {
+	Template IroncoreMetalMachineTemplateResource `json:"template"`
 }
 
 // +kubebuilder:object:root=true
 
-// MetalMachineTemplate is the Schema for the metalmachinetemplates API
-type MetalMachineTemplate struct {
+// IroncoreMetalMachineTemplate is the Schema for the ironcoremetalmachinetemplates API
+type IroncoreMetalMachineTemplate struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MetalMachineTemplateSpec `json:"spec,omitempty"`
+	Spec IroncoreMetalMachineTemplateSpec `json:"spec,omitempty"`
 }
 
-// MetalMachineTemplateResource defines the spec and metadata for MetalMachineTemplate supported by capi.
-type MetalMachineTemplateResource struct {
+// IroncoreMetalMachineTemplateResource defines the spec and metadata for IroncoreMetalMachineTemplate supported by capi.
+type IroncoreMetalMachineTemplateResource struct {
 	// Standard object's metadata.
 	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 	// +optional
-	ObjectMeta clusterv1.ObjectMeta `json:"metadata,omitempty"`
-	Spec       MetalMachineSpec     `json:"spec"`
+	ObjectMeta clusterv1.ObjectMeta     `json:"metadata,omitempty"`
+	Spec       IroncoreMetalMachineSpec `json:"spec"`
 }
 
 // +kubebuilder:object:root=true
 
-// MetalMachineTemplateList contains a list of MetalMachineTemplate
-type MetalMachineTemplateList struct {
+// IroncoreMetalMachineTemplateList contains a list of IroncoreMetalMachineTemplate
+type IroncoreMetalMachineTemplateList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []MetalMachineTemplate `json:"items"`
+	Items           []IroncoreMetalMachineTemplate `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&MetalMachineTemplate{}, &MetalMachineTemplateList{})
+	SchemeBuilder.Register(&IroncoreMetalMachineTemplate{}, &IroncoreMetalMachineTemplateList{})
 }

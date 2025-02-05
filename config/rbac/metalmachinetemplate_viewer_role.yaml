@@ -1,16 +1,16 @@
-# permissions for end users to view metalmachinetemplates.
+# permissions for end users to view ironcoremetalmachinetemplates.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalmachinetemplate-viewer-role
+  name: ironcoremetalmachinetemplate-viewer-role
 rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalmachinetemplates
+  - ironcoremetalmachinetemplates
   verbs:
   - get
   - list
@@ -18,6 +18,6 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalmachinetemplates/status
+  - ironcoremetalmachinetemplates/status
   verbs:
   - get

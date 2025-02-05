@@ -22,10 +22,10 @@ resources:
 # default, aiding admins in cluster management. Those roles are
 # not used by the Project itself. You can comment the following lines
 # if you do not want those helpers be installed with your Project.
-- metalmachinetemplate_editor_role.yaml
-- metalmachinetemplate_viewer_role.yaml
-- metalmachine_editor_role.yaml
-- metalmachine_viewer_role.yaml
+- ironcoremetalmachinetemplate_editor_role.yaml
+- ironcoremetalmachinetemplate_viewer_role.yaml
+- ironcoremetalmachine_editor_role.yaml
+- ironcoremetalmachine_viewer_role.yaml
 - metalcluster_editor_role.yaml
 - metalcluster_viewer_role.yaml
 

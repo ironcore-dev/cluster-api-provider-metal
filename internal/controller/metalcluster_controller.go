@@ -108,8 +108,8 @@ func (r *MetalClusterReconciler) reconcileDelete(ctx context.Context, clusterSco
 	clusterScope.Logger.V(4).Info("reconciling MetalCluster delete")
 	// Deletion usually should be triggered through the deletion of the owning cluster.
 	// If the MetalCluster was also flagged for deletion (e.g. deletion using the manifest file)
-	// we should only allow to remove the finalizer when there are no MetalMachines left.
-	machines, err := r.listMetalMachinesForCluster(ctx, clusterScope)
+	// we should only allow to remove the finalizer when there are no IroncoreMetalMachines left.
+	machines, err := r.listIroncoreMetalMachinesForCluster(ctx, clusterScope)
 	if err != nil {
 		return reconcile.Result{}, errors.Wrapf(err, "could not retrieve metal machines for cluster %q", clusterScope.InfraClusterName())
 	}
@@ -139,8 +139,8 @@ func (r *MetalClusterReconciler) reconcileNormal(_ context.Context, clusterScope
 	return ctrl.Result{}, nil
 }
 
-func (r *MetalClusterReconciler) listMetalMachinesForCluster(ctx context.Context, clusterScope *scope.ClusterScope) ([]infrav1.MetalMachine, error) {
-	var machineList infrav1.MetalMachineList
+func (r *MetalClusterReconciler) listIroncoreMetalMachinesForCluster(ctx context.Context, clusterScope *scope.ClusterScope) ([]infrav1.IroncoreMetalMachine, error) {
+	var machineList infrav1.IroncoreMetalMachineList
 	err := r.List(ctx, &machineList, client.InNamespace(clusterScope.Namespace()), client.MatchingLabels{
 		clusterv1.ClusterNameLabel: clusterScope.Name(),
 	})

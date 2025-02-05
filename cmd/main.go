@@ -130,11 +130,11 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "MetalCluster")
 		os.Exit(1)
 	}
-	if err = (&controller.MetalMachineReconciler{
+	if err = (&controller.IroncoreMetalMachineReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MetalMachine")
+		setupLog.Error(err, "unable to create controller", "controller", "IroncoreMetalMachine")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

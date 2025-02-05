@@ -1,6 +1,6 @@
 ## Append samples of your project ##
 resources:
 - infrastructure_v1alpha1_metalcluster.yaml
-- infrastructure_v1alpha1_metalmachine.yaml
-- infrastructure_v1alpha1_metalmachinetemplate.yaml
+- infrastructure_v1alpha1_ironcoremetalmachine.yaml
+- infrastructure_v1alpha1_ironcoremetalmachinetemplate.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples
