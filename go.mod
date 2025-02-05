@@ -1,4 +1,4 @@
-module github.com/ironcore-dev/cluster-api-provider-metal
+module github.com/ironcore-dev/cluster-api-provider-ironcore-metal
 
 go 1.23.0
 

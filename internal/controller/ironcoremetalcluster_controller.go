@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ironcore-dev/cluster-api-provider-metal/internal/scope"
+	"github.com/ironcore-dev/cluster-api-provider-ironcore-metal/internal/scope"
 	"github.com/pkg/errors"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -24,24 +24,24 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	infrav1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
+	infrav1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
 )
 
-// MetalClusterReconciler reconciles a MetalCluster object
-type MetalClusterReconciler struct {
+// IroncoreMetalClusterReconciler reconciles a IroncoreMetalCluster object
+type IroncoreMetalClusterReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalclusters,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalclusters/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=metalclusters/finalizers,verbs=update
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalclusters,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalclusters/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=infrastructure.cluster.x-k8s.io,resources=ironcoremetalclusters/finalizers,verbs=update
 // +kubebuilder:rbac:groups=cluster.x-k8s.io,resources=clusters;clusters/status,verbs=get;list;watch
 
-func (r *MetalClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *IroncoreMetalClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
 
-	metalCluster := &infrav1.MetalCluster{}
+	metalCluster := &infrav1.IroncoreMetalCluster{}
 	if err := r.Client.Get(ctx, req.NamespacedName, metalCluster); err != nil {
 		if apierrors.IsNotFound(err) {
 			return ctrl.Result{}, nil
@@ -55,7 +55,7 @@ func (r *MetalClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request
 		return ctrl.Result{}, err
 	}
 	if cluster == nil {
-		logger.Info("waiting for Cluster Controller to set OwnerRef on MetalCluster")
+		logger.Info("waiting for Cluster Controller to set OwnerRef on IroncoreMetalCluster")
 		return ctrl.Result{}, nil
 	}
 
@@ -63,27 +63,27 @@ func (r *MetalClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request
 	ctx = ctrl.LoggerInto(ctx, logger)
 
 	if annotations.IsPaused(cluster, metalCluster) {
-		logger.Info("MetalCluster or owning Cluster is marked as paused, not reconciling")
+		logger.Info("IroncoreMetalCluster or owning Cluster is marked as paused, not reconciling")
 		return ctrl.Result{}, nil
 	}
 
 	// Create the scope.
 	clusterScope, err := scope.NewClusterScope(scope.ClusterScopeParams{
-		Client:         r.Client,
-		Logger:         &logger,
-		Cluster:        cluster,
-		MetalCluster:   metalCluster,
-		ControllerName: "metalcluster",
+		Client:               r.Client,
+		Logger:               &logger,
+		Cluster:              cluster,
+		IroncoreMetalCluster: metalCluster,
+		ControllerName:       "ironcoremetalcluster",
 	})
 
 	if err != nil {
 		return reconcile.Result{}, errors.Errorf("failed to create scope: %+v", err)
 	}
 
-	// Always close the scope when exiting this function, so we can persist any MetalCluster changes.
+	// Always close the scope when exiting this function, so we can persist any IroncoreMetalCluster changes.
 	defer func() {
 		if err := clusterScope.Close(); err != nil && err == nil {
-			logger.Error(err, "failed to close MetalCluster scope")
+			logger.Error(err, "failed to close IroncoreMetalCluster scope")
 		}
 	}()
 
@@ -97,19 +97,19 @@ func (r *MetalClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request
 
 }
 
-func (r *MetalClusterReconciler) reconcileDelete(ctx context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
+func (r *IroncoreMetalClusterReconciler) reconcileDelete(ctx context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
 	// We want to prevent deletion unless the owning cluster was flagged for deletion.
 	if clusterScope.Cluster.DeletionTimestamp.IsZero() {
-		clusterScope.Error(errors.New("deletion was requested but owning cluster wasn't deleted"), "Unable to delete MetalCluster")
+		clusterScope.Error(errors.New("deletion was requested but owning cluster wasn't deleted"), "Unable to delete IroncoreMetalCluster")
 		// We stop reconciling here. It will be triggered again once the owning cluster was deleted.
 		return reconcile.Result{}, nil
 	}
 
-	clusterScope.Logger.V(4).Info("reconciling MetalCluster delete")
+	clusterScope.Logger.V(4).Info("reconciling IroncoreMetalCluster delete")
 	// Deletion usually should be triggered through the deletion of the owning cluster.
-	// If the MetalCluster was also flagged for deletion (e.g. deletion using the manifest file)
-	// we should only allow to remove the finalizer when there are no MetalMachines left.
-	machines, err := r.listMetalMachinesForCluster(ctx, clusterScope)
+	// If the IroncoreMetalCluster was also flagged for deletion (e.g. deletion using the manifest file)
+	// we should only allow to remove the finalizer when there are no IroncoreMetalMachines left.
+	machines, err := r.listIroncoreMetalMachinesForCluster(ctx, clusterScope)
 	if err != nil {
 		return reconcile.Result{}, errors.Wrapf(err, "could not retrieve metal machines for cluster %q", clusterScope.InfraClusterName())
 	}
@@ -121,26 +121,26 @@ func (r *MetalClusterReconciler) reconcileDelete(ctx context.Context, clusterSco
 	}
 
 	clusterScope.Info("cluster deleted successfully")
-	ctrlutil.RemoveFinalizer(clusterScope.MetalCluster, infrav1.ClusterFinalizer)
+	ctrlutil.RemoveFinalizer(clusterScope.IroncoreMetalCluster, infrav1.ClusterFinalizer)
 	return ctrl.Result{}, nil
 }
 
 //nolint:unparam
-func (r *MetalClusterReconciler) reconcileNormal(_ context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
-	clusterScope.Logger.Info("Reconciling MetalCluster")
+func (r *IroncoreMetalClusterReconciler) reconcileNormal(_ context.Context, clusterScope *scope.ClusterScope) (reconcile.Result, error) {
+	clusterScope.Logger.Info("Reconciling IroncoreMetalCluster")
 
-	// If the MetalCluster doesn't have our finalizer, add it.
-	ctrlutil.AddFinalizer(clusterScope.MetalCluster, infrav1.ClusterFinalizer)
+	// If the IroncoreMetalCluster doesn't have our finalizer, add it.
+	ctrlutil.AddFinalizer(clusterScope.IroncoreMetalCluster, infrav1.ClusterFinalizer)
 
-	conditions.MarkTrue(clusterScope.MetalCluster, infrav1.MetalClusterReady)
+	conditions.MarkTrue(clusterScope.IroncoreMetalCluster, infrav1.IroncoreMetalClusterReady)
 
-	clusterScope.MetalCluster.Status.Ready = true
+	clusterScope.IroncoreMetalCluster.Status.Ready = true
 
 	return ctrl.Result{}, nil
 }
 
-func (r *MetalClusterReconciler) listMetalMachinesForCluster(ctx context.Context, clusterScope *scope.ClusterScope) ([]infrav1.MetalMachine, error) {
-	var machineList infrav1.MetalMachineList
+func (r *IroncoreMetalClusterReconciler) listIroncoreMetalMachinesForCluster(ctx context.Context, clusterScope *scope.ClusterScope) ([]infrav1.IroncoreMetalMachine, error) {
+	var machineList infrav1.IroncoreMetalMachineList
 	err := r.List(ctx, &machineList, client.InNamespace(clusterScope.Namespace()), client.MatchingLabels{
 		clusterv1.ClusterNameLabel: clusterScope.Name(),
 	})
@@ -152,13 +152,13 @@ func (r *MetalClusterReconciler) listMetalMachinesForCluster(ctx context.Context
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *MetalClusterReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {
+func (r *IroncoreMetalClusterReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&infrav1.MetalCluster{}).
+		For(&infrav1.IroncoreMetalCluster{}).
 		WithEventFilter(predicates.ResourceNotPaused(mgr.GetScheme(), ctrl.LoggerFrom(ctx))).
 		Watches(
 			&clusterv1.Cluster{},
-			handler.EnqueueRequestsFromMapFunc(util.ClusterToInfrastructureMapFunc(ctx, infrav1.GroupVersion.WithKind("MetalCluster"), mgr.GetClient(), &infrav1.MetalCluster{})),
+			handler.EnqueueRequestsFromMapFunc(util.ClusterToInfrastructureMapFunc(ctx, infrav1.GroupVersion.WithKind("IroncoreMetalCluster"), mgr.GetClient(), &infrav1.IroncoreMetalCluster{})),
 		).
 		Complete(r)
 }

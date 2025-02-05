@@ -14,10 +14,10 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	infrav1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
+	infrav1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
 )
 
-var _ = Describe("MetalMachine Controller", func() {
+var _ = Describe("IroncoreMetalCluster Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -27,13 +27,13 @@ var _ = Describe("MetalMachine Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		metalmachine := &infrav1.MetalMachine{}
+		ironcoremetalcluster := &infrav1.IroncoreMetalCluster{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind MetalMachine")
-			err := k8sClient.Get(ctx, typeNamespacedName, metalmachine)
+			By("creating the custom resource for the Kind IroncoreMetalCluster")
+			err := k8sClient.Get(ctx, typeNamespacedName, ironcoremetalcluster)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &infrav1.MetalMachine{
+				resource := &infrav1.IroncoreMetalCluster{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -46,16 +46,16 @@ var _ = Describe("MetalMachine Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &infrav1.MetalMachine{}
+			resource := &infrav1.IroncoreMetalCluster{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance MetalMachine")
+			By("Cleanup the specific resource instance IroncoreMetalCluster")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &MetalMachineReconciler{
+			controllerReconciler := &IroncoreMetalClusterReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

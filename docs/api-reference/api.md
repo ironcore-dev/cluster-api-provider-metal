@@ -10,10 +10,10 @@
 </div>
 Resource Types:
 <ul></ul>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster
 </h3>
 <div>
-<p>MetalCluster is the Schema for the metalclusters API</p>
+<p>IroncoreMetalCluster is the Schema for the ironcoremetalclusters API</p>
 </div>
 <table>
 <thead>
@@ -41,8 +41,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterSpec">
-MetalClusterSpec
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterSpec">
+IroncoreMetalClusterSpec
 </a>
 </em>
 </td>
@@ -69,8 +69,8 @@ sigs.k8s.io/cluster-api/api/v1beta1.APIEndpoint
 <td>
 <code>status</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterStatus">
-MetalClusterStatus
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterStatus">
+IroncoreMetalClusterStatus
 </a>
 </em>
 </td>
@@ -79,13 +79,13 @@ MetalClusterStatus
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterSpec">MetalClusterSpec
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterSpec">IroncoreMetalClusterSpec
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster</a>)
 </p>
 <div>
-<p>MetalClusterSpec defines the desired state of MetalCluster</p>
+<p>IroncoreMetalClusterSpec defines the desired state of IroncoreMetalCluster</p>
 </div>
 <table>
 <thead>
@@ -109,13 +109,13 @@ sigs.k8s.io/cluster-api/api/v1beta1.APIEndpoint
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterStatus">MetalClusterStatus
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterStatus">IroncoreMetalClusterStatus
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster</a>)
 </p>
 <div>
-<p>MetalClusterStatus defines the observed state of MetalCluster</p>
+<p>IroncoreMetalClusterStatus defines the observed state of IroncoreMetalCluster</p>
 </div>
 <table>
 <thead>
@@ -146,15 +146,15 @@ sigs.k8s.io/cluster-api/api/v1beta1.Conditions
 </td>
 <td>
 <em>(Optional)</em>
-<p>Conditions defines current service state of the MetalCluster.</p>
+<p>Conditions defines current service state of the IroncoreMetalCluster.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachine">MetalMachine
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachine">IroncoreMetalMachine
 </h3>
 <div>
-<p>MetalMachine is the Schema for the metalmachines API</p>
+<p>IroncoreMetalMachine is the Schema for the ironcoremetalmachines API</p>
 </div>
 <table>
 <thead>
@@ -182,8 +182,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineSpec">
-MetalMachineSpec
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineSpec">
+IroncoreMetalMachineSpec
 </a>
 </em>
 </td>
@@ -226,7 +226,7 @@ Kubernetes meta/v1.LabelSelector
 <td>
 <em>(Optional)</em>
 <p>ServerSelector specifies matching criteria for labels on Servers.
-This is used to claim specific Server types for a MetalMachine.</p>
+This is used to claim specific Server types for a IroncoreMetalMachine.</p>
 </td>
 </tr>
 </table>
@@ -236,8 +236,8 @@ This is used to claim specific Server types for a MetalMachine.</p>
 <td>
 <code>status</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineStatus">
-MetalMachineStatus
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineStatus">
+IroncoreMetalMachineStatus
 </a>
 </em>
 </td>
@@ -246,13 +246,13 @@ MetalMachineStatus
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineSpec">MetalMachineSpec
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineSpec">IroncoreMetalMachineSpec
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachine">MetalMachine</a>, <a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateResource">MetalMachineTemplateResource</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachine">IroncoreMetalMachine</a>, <a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateResource">IroncoreMetalMachineTemplateResource</a>)
 </p>
 <div>
-<p>MetalMachineSpec defines the desired state of MetalMachine</p>
+<p>IroncoreMetalMachineSpec defines the desired state of IroncoreMetalMachine</p>
 </div>
 <table>
 <thead>
@@ -297,18 +297,18 @@ Kubernetes meta/v1.LabelSelector
 <td>
 <em>(Optional)</em>
 <p>ServerSelector specifies matching criteria for labels on Servers.
-This is used to claim specific Server types for a MetalMachine.</p>
+This is used to claim specific Server types for a IroncoreMetalMachine.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineStatus">MetalMachineStatus
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineStatus">IroncoreMetalMachineStatus
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachine">MetalMachine</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachine">IroncoreMetalMachine</a>)
 </p>
 <div>
-<p>MetalMachineStatus defines the observed state of MetalMachine</p>
+<p>IroncoreMetalMachineStatus defines the observed state of IroncoreMetalMachine</p>
 </div>
 <table>
 <thead>
@@ -382,10 +382,10 @@ controller&rsquo;s output.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplate">MetalMachineTemplate
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplate">IroncoreMetalMachineTemplate
 </h3>
 <div>
-<p>MetalMachineTemplate is the Schema for the metalmachinetemplates API</p>
+<p>IroncoreMetalMachineTemplate is the Schema for the ironcoremetalmachinetemplates API</p>
 </div>
 <table>
 <thead>
@@ -413,8 +413,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateSpec">
-MetalMachineTemplateSpec
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateSpec">
+IroncoreMetalMachineTemplateSpec
 </a>
 </em>
 </td>
@@ -426,8 +426,8 @@ MetalMachineTemplateSpec
 <td>
 <code>template</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateResource">
-MetalMachineTemplateResource
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateResource">
+IroncoreMetalMachineTemplateResource
 </a>
 </em>
 </td>
@@ -439,13 +439,13 @@ MetalMachineTemplateResource
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateResource">MetalMachineTemplateResource
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateResource">IroncoreMetalMachineTemplateResource
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateSpec">MetalMachineTemplateSpec</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateSpec">IroncoreMetalMachineTemplateSpec</a>)
 </p>
 <div>
-<p>MetalMachineTemplateResource defines the spec and metadata for MetalMachineTemplate supported by capi.</p>
+<p>IroncoreMetalMachineTemplateResource defines the spec and metadata for IroncoreMetalMachineTemplate supported by capi.</p>
 </div>
 <table>
 <thead>
@@ -474,8 +474,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineSpec">
-MetalMachineSpec
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineSpec">
+IroncoreMetalMachineSpec
 </a>
 </em>
 </td>
@@ -518,7 +518,7 @@ Kubernetes meta/v1.LabelSelector
 <td>
 <em>(Optional)</em>
 <p>ServerSelector specifies matching criteria for labels on Servers.
-This is used to claim specific Server types for a MetalMachine.</p>
+This is used to claim specific Server types for a IroncoreMetalMachine.</p>
 </td>
 </tr>
 </table>
@@ -526,13 +526,13 @@ This is used to claim specific Server types for a MetalMachine.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateSpec">MetalMachineTemplateSpec
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateSpec">IroncoreMetalMachineTemplateSpec
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplate">MetalMachineTemplate</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplate">IroncoreMetalMachineTemplate</a>)
 </p>
 <div>
-<p>MetalMachineTemplateSpec defines the desired state of MetalMachineTemplate</p>
+<p>IroncoreMetalMachineTemplateSpec defines the desired state of IroncoreMetalMachineTemplate</p>
 </div>
 <table>
 <thead>
@@ -546,8 +546,8 @@ This is used to claim specific Server types for a MetalMachine.</p>
 <td>
 <code>template</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalMachineTemplateResource">
-MetalMachineTemplateResource
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalMachineTemplateResource">
+IroncoreMetalMachineTemplateResource
 </a>
 </em>
 </td>

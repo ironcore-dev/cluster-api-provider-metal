@@ -10,16 +10,16 @@ import (
 )
 
 const (
-	// MachineFinalizer allows ReconcileMetalMachine to clean up resources associated with MetalMachine before
+	// MachineFinalizer allows ReconcileIroncoreMetalMachine to clean up resources associated with IroncoreMetalMachine before
 	// removing it from the apiserver.
-	MachineFinalizer = "metalmachine.infrastructure.cluster.x-k8s.io"
+	MachineFinalizer = "ironcoremetalmachine.infrastructure.cluster.x-k8s.io"
 
 	// DefaultReconcilerRequeue is the default value for the reconcile retry.
 	DefaultReconcilerRequeue = 5 * time.Second
 )
 
-// MetalMachineSpec defines the desired state of MetalMachine
-type MetalMachineSpec struct {
+// IroncoreMetalMachineSpec defines the desired state of IroncoreMetalMachine
+type IroncoreMetalMachineSpec struct {
 	// ProviderID is the unique identifier as specified by the cloud provider.
 	// +optional
 	ProviderID *string `json:"providerID,omitempty"`
@@ -28,13 +28,13 @@ type MetalMachineSpec struct {
 	Image string `json:"image"`
 
 	// ServerSelector specifies matching criteria for labels on Servers.
-	// This is used to claim specific Server types for a MetalMachine.
+	// This is used to claim specific Server types for a IroncoreMetalMachine.
 	// +optional
 	ServerSelector *metav1.LabelSelector `json:"serverSelector,omitempty"`
 }
 
-// MetalMachineStatus defines the observed state of MetalMachine
-type MetalMachineStatus struct {
+// IroncoreMetalMachineStatus defines the observed state of IroncoreMetalMachine
+type IroncoreMetalMachineStatus struct {
 	// Ready indicates the Machine infrastructure has been provisioned and is ready.
 	// +optional
 	Ready bool `json:"ready"`
@@ -81,24 +81,24 @@ type MetalMachineStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// MetalMachine is the Schema for the metalmachines API
-type MetalMachine struct {
+// IroncoreMetalMachine is the Schema for the ironcoremetalmachines API
+type IroncoreMetalMachine struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   MetalMachineSpec   `json:"spec,omitempty"`
-	Status MetalMachineStatus `json:"status,omitempty"`
+	Spec   IroncoreMetalMachineSpec   `json:"spec,omitempty"`
+	Status IroncoreMetalMachineStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// MetalMachineList contains a list of MetalMachine
-type MetalMachineList struct {
+// IroncoreMetalMachineList contains a list of IroncoreMetalMachine
+type IroncoreMetalMachineList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []MetalMachine `json:"items"`
+	Items           []IroncoreMetalMachine `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&MetalMachine{}, &MetalMachineList{})
+	SchemeBuilder.Register(&IroncoreMetalMachine{}, &IroncoreMetalMachineList{})
 }

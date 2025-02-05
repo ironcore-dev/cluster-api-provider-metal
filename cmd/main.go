@@ -25,8 +25,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	infrastructurev1alpha1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
-	"github.com/ironcore-dev/cluster-api-provider-metal/internal/controller"
+	infrastructurev1alpha1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
+	"github.com/ironcore-dev/cluster-api-provider-ironcore-metal/internal/controller"
 	metalv1alpha1 "github.com/ironcore-dev/metal-operator/api/v1alpha1"
 	// +kubebuilder:scaffold:imports
 )
@@ -123,18 +123,18 @@ func main() {
 	// Set up the context that's going to be used in controllers and for the manager.
 	ctx := ctrl.SetupSignalHandler()
 
-	if err = (&controller.MetalClusterReconciler{
+	if err = (&controller.IroncoreMetalClusterReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(ctx, mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MetalCluster")
+		setupLog.Error(err, "unable to create controller", "controller", "IroncoreMetalCluster")
 		os.Exit(1)
 	}
-	if err = (&controller.MetalMachineReconciler{
+	if err = (&controller.IroncoreMetalMachineReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MetalMachine")
+		setupLog.Error(err, "unable to create controller", "controller", "IroncoreMetalMachine")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

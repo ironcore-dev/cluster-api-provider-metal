@@ -1,16 +1,16 @@
-# permissions for end users to view metalclusters.
+# permissions for end users to view ironcoremetalclusters.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: cluster-api-provider-metal
+    app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalcluster-viewer-role
+  name: ironcoremetalcluster-viewer-role
 rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters
+  - ironcoremetalclusters
   verbs:
   - get
   - list
@@ -18,6 +18,6 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters/status
+  - ironcoremetalclusters/status
   verbs:
   - get

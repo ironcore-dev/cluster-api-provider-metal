@@ -55,8 +55,8 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters
-  - metalmachines
+  - ironcoremetalclusters
+  - ironcoremetalmachines
   verbs:
   - create
   - delete
@@ -68,15 +68,15 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters/finalizers
-  - metalmachines/finalizers
+  - ironcoremetalclusters/finalizers
+  - ironcoremetalmachines/finalizers
   verbs:
   - update
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters/status
-  - metalmachines/status
+  - ironcoremetalclusters/status
+  - ironcoremetalmachines/status
   verbs:
   - get
   - patch

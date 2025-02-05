@@ -95,8 +95,8 @@ def deploy_capi():
 def deploy_metal():
     version = settings.get("metal_version")
     image = settings.get("metal_image")
-    metal_uri = "https://github.com/ironcore-dev/metal-operator//config/dev"
-    cmd = "{} build {} | {} | {} apply -f -".format(kustomize_cmd, metal_uri, envsubst_cmd, kubectl_cmd)
+    metal_uri = "https://github.com/ironcore-dev/metal-operator/config/dev"
+    cmd = "{} build {} | {} | {} apply -f - || true".format(kustomize_cmd, metal_uri, envsubst_cmd, kubectl_cmd)
     local(cmd, quiet=True)
 
     if settings.get("new_args"):
@@ -108,6 +108,26 @@ def deploy_metal():
                     replace_args_with_new_args(namespace, "metal-operator-controller-manager", metal_new_args)
 
     patch_image("metal-operator-system", "metal-operator-controller-manager", image)
+
+    patch_env("metal-operator-system", "metal-operator-controller-manager", "ENABLE_WEBHOOKS", "false")
+
+def patch_env(namespace, name, env_name, env_value):
+    patch = [{
+        "op": "add",
+        "path": "/spec/template/spec/containers/0/env",
+        "value": []
+    }, {
+        "op": "add",
+        "path": "/spec/template/spec/containers/0/env/-",
+        "value": {
+            "name": env_name,
+            "value": env_value
+        }
+    }]
+    
+    local("kubectl patch deployment {} -n {} --type json -p='{}'".format(
+        name, namespace, str(encode_json(patch)).replace("\n", "")
+    ))
 
 def patch_image(namespace, name, image):
     patch = [{
@@ -189,7 +209,7 @@ def capm():
         extra_args = settings.get("extra_args").get("do")
         if extra_args:
             yaml_dict = decode_yaml_stream(yaml)
-            append_arg_for_container_in_deployment(yaml_dict, "capm-controller-manager", "capm-system", "cluster-api-metal-controller", extra_args)
+            append_arg_for_container_in_deployment(yaml_dict, "capm-controller-manager", "capm-system", "cluster-api-ironcore-metal-controller", extra_args)
             yaml = str(encode_yaml_stream(yaml_dict))
             yaml = fixup_yaml_empty_arrays(yaml)
 
@@ -282,18 +302,18 @@ k8s_resource(
     auto_init=False
 )
 
-k8s_yaml('./config/samples/infrastructure_v1alpha1_metalcluster.yaml')
+k8s_yaml('./config/samples/infrastructure_v1alpha1_ironcoremetalcluster.yaml')
 k8s_resource(
-    objects=['metalcluster-sample:metalcluster'],
-    new_name='metalcluster-sample',
+    objects=['ironcoremetalcluster-sample:ironcoremetalcluster'],
+    new_name='ironcoremetalcluster-sample',
     trigger_mode=TRIGGER_MODE_MANUAL,
     auto_init=False
 )
 
-k8s_yaml('./config/samples/infrastructure_v1alpha1_metalmachinetemplate.yaml')
+k8s_yaml('./config/samples/infrastructure_v1alpha1_ironcoremetalmachinetemplate.yaml')
 k8s_resource(
-    objects=['metalmachinetemplate-sample-control-plane:metalmachinetemplate'],
-    new_name='metalmachinetemplate-sample-control-plane',
+    objects=['ironcoremetalmachinetemplate-sample-control-plane:ironcoremetalmachinetemplate'],
+    new_name='ironcoremetalmachinetemplate-sample-control-plane',
     trigger_mode=TRIGGER_MODE_MANUAL,
     auto_init=False
 )

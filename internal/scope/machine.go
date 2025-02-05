@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	infrav1 "github.com/ironcore-dev/cluster-api-provider-metal/api/v1alpha1"
+	infrav1 "github.com/ironcore-dev/cluster-api-provider-ironcore-metal/api/v1alpha1"
 	"github.com/ironcore-dev/metal-operator/api/v1alpha1"
 	"github.com/pkg/errors"
 	"k8s.io/utils/ptr"
@@ -19,24 +19,24 @@ import (
 
 // MachineScopeParams defines the input parameters used to create a new Scope.
 type MachineScopeParams struct {
-	Client       client.Client
-	Logger       *logr.Logger
-	Cluster      *clusterv1.Cluster
-	Machine      *clusterv1.Machine
-	MetalCluster *infrav1.MetalCluster
-	MetalMachine *infrav1.MetalMachine
+	Client               client.Client
+	Logger               *logr.Logger
+	Cluster              *clusterv1.Cluster
+	Machine              *clusterv1.Machine
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
+	IroncoreMetalMachine *infrav1.IroncoreMetalMachine
 }
 
 // MachineScope defines the basic context for an actuator to operate upon.
 type MachineScope struct {
 	*logr.Logger
-	client       client.Client
-	patchHelper  *patch.Helper
-	Cluster      *clusterv1.Cluster
-	Machine      *clusterv1.Machine
-	MetalCluster *infrav1.MetalCluster
-	MetalMachine *infrav1.MetalMachine
-	ServerClaim  *v1alpha1.ServerClaim
+	client               client.Client
+	patchHelper          *patch.Helper
+	Cluster              *clusterv1.Cluster
+	Machine              *clusterv1.Machine
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
+	IroncoreMetalMachine *infrav1.IroncoreMetalMachine
+	ServerClaim          *v1alpha1.ServerClaim
 }
 
 // NewMachineScope creates a new Scope from the supplied parameters.
@@ -51,11 +51,11 @@ func NewMachineScope(params MachineScopeParams) (*MachineScope, error) {
 	if params.Machine == nil {
 		return nil, errors.New("Machine is required when creating a MachineScope")
 	}
-	if params.MetalCluster == nil {
-		return nil, errors.New("MetalCluster is required when creating a MachineScope")
+	if params.IroncoreMetalCluster == nil {
+		return nil, errors.New("IroncoreMetalCluster is required when creating a MachineScope")
 	}
-	if params.MetalMachine == nil {
-		return nil, errors.New("MetalMachine is required when creating a MachineScope")
+	if params.IroncoreMetalMachine == nil {
+		return nil, errors.New("IroncoreMetalMachine is required when creating a MachineScope")
 	}
 	if params.Logger == nil {
 		logger := log.FromContext(context.Background())
@@ -63,15 +63,15 @@ func NewMachineScope(params MachineScopeParams) (*MachineScope, error) {
 	}
 
 	machineScope := &MachineScope{
-		Logger:       params.Logger,
-		client:       params.Client,
-		Cluster:      params.Cluster,
-		Machine:      params.Machine,
-		MetalCluster: params.MetalCluster,
-		MetalMachine: params.MetalMachine,
+		Logger:               params.Logger,
+		client:               params.Client,
+		Cluster:              params.Cluster,
+		Machine:              params.Machine,
+		IroncoreMetalCluster: params.IroncoreMetalCluster,
+		IroncoreMetalMachine: params.IroncoreMetalMachine,
 	}
 
-	helper, err := patch.NewHelper(params.MetalMachine, params.Client)
+	helper, err := patch.NewHelper(params.IroncoreMetalMachine, params.Client)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to init patch helper")
 	}
@@ -81,29 +81,29 @@ func NewMachineScope(params MachineScopeParams) (*MachineScope, error) {
 	return machineScope, nil
 }
 
-// SetReady sets the MetalMachine Ready Status.
+// SetReady sets the IroncoreMetalMachine Ready Status.
 func (m *MachineScope) SetReady() {
-	m.MetalMachine.Status.Ready = true
+	m.IroncoreMetalMachine.Status.Ready = true
 }
 
-// SetNotReady sets the MetalMachine Ready Status to false.
+// SetNotReady sets the IroncoreMetalMachine Ready Status to false.
 func (m *MachineScope) SetNotReady() {
-	m.MetalMachine.Status.Ready = false
+	m.IroncoreMetalMachine.Status.Ready = false
 }
 
-// SetFailureMessage sets the MetalMachine status failure message.
+// SetFailureMessage sets the IroncoreMetalMachine status failure message.
 func (m *MachineScope) SetFailureMessage(v error) {
-	m.MetalMachine.Status.FailureMessage = ptr.To(v.Error())
+	m.IroncoreMetalMachine.Status.FailureMessage = ptr.To(v.Error())
 }
 
-// SetFailureReason sets the MetalMachine status failure reason.
+// SetFailureReason sets the IroncoreMetalMachine status failure reason.
 func (m *MachineScope) SetFailureReason(v string) {
-	m.MetalMachine.Status.FailureReason = v
+	m.IroncoreMetalMachine.Status.FailureReason = v
 }
 
 // HasFailed returns the failure state of the machine scope.
 func (m *MachineScope) HasFailed() bool {
-	return m.MetalMachine.Status.FailureReason != "" || m.MetalMachine.Status.FailureMessage != nil
+	return m.IroncoreMetalMachine.Status.FailureReason != "" || m.IroncoreMetalMachine.Status.FailureMessage != nil
 }
 
 // PatchObject persists the Machine configuration and status.
@@ -111,7 +111,7 @@ func (s *MachineScope) PatchObject() error {
 	// always update the readyCondition.
 	// TBD readyCondition
 
-	return s.patchHelper.Patch(context.TODO(), s.MetalMachine)
+	return s.patchHelper.Patch(context.TODO(), s.IroncoreMetalMachine)
 }
 
 // Close closes the current scope persisting the Machine configuration and status.

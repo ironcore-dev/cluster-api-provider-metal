@@ -3,9 +3,9 @@ kind: Service
 metadata:
   labels:
     control-plane: controller-manager
-    app.kubernetes.io/name: cluster-api-provider-metal
+    app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: controller-manager-metrics-service
+  name: controller-manager-metrics
   namespace: system
 spec:
   ports:

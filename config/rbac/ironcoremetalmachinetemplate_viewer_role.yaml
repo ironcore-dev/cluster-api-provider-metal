@@ -1,27 +1,23 @@
-# permissions for end users to edit metalmachines.
+# permissions for end users to view ironcoremetalmachinetemplates.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: cluster-api-provider-metal
+    app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalmachine-editor-role
+  name: ironcoremetalmachinetemplate-viewer-role
 rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalmachines
+  - ironcoremetalmachinetemplates
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalmachines/status
+  - ironcoremetalmachinetemplates/status
   verbs:
   - get

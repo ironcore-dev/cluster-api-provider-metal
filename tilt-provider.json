@@ -1,7 +1,7 @@
 {
   "name": "metal",
   "config": {
-    "image": "ghcr.io/ironcore-dev/cluster-api-provider-metal",
+    "image": "ghcr.io/ironcore-dev/cluster-api-provider-ironcore-metal",
     "live_reload_deps": [
       "go.mod",
       "go.sum",
