@@ -18,21 +18,21 @@ import (
 
 // ClusterScopeParams defines the input parameters used to create a new Scope.
 type ClusterScopeParams struct {
-	Client         client.Client
-	Logger         *logr.Logger
-	Cluster        *clusterv1.Cluster
-	MetalCluster   *infrav1.MetalCluster
-	ControllerName string
+	Client               client.Client
+	Logger               *logr.Logger
+	Cluster              *clusterv1.Cluster
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
+	ControllerName       string
 }
 
 // ClusterScope defines the basic context for an actuator to operate upon.
 type ClusterScope struct {
 	*logr.Logger
-	client         client.Client
-	patchHelper    *patch.Helper
-	Cluster        *clusterv1.Cluster
-	MetalCluster   *infrav1.MetalCluster
-	controllerName string
+	client               client.Client
+	patchHelper          *patch.Helper
+	Cluster              *clusterv1.Cluster
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
+	controllerName       string
 }
 
 // NewClusterScope creates a new Scope from the supplied parameters.
@@ -44,8 +44,8 @@ func NewClusterScope(params ClusterScopeParams) (*ClusterScope, error) {
 	if params.Cluster == nil {
 		return nil, errors.New("Cluster is required when creating a ClusterScope")
 	}
-	if params.MetalCluster == nil {
-		return nil, errors.New("MetalCluster is required when creating a ClusterScope")
+	if params.IroncoreMetalCluster == nil {
+		return nil, errors.New("IroncoreMetalCluster is required when creating a ClusterScope")
 	}
 	if params.Logger == nil {
 		logger := log.FromContext(context.Background())
@@ -53,14 +53,14 @@ func NewClusterScope(params ClusterScopeParams) (*ClusterScope, error) {
 	}
 
 	clusterScope := &ClusterScope{
-		Logger:         params.Logger,
-		client:         params.Client,
-		Cluster:        params.Cluster,
-		MetalCluster:   params.MetalCluster,
-		controllerName: params.ControllerName,
+		Logger:               params.Logger,
+		client:               params.Client,
+		Cluster:              params.Cluster,
+		IroncoreMetalCluster: params.IroncoreMetalCluster,
+		controllerName:       params.ControllerName,
 	}
 
-	helper, err := patch.NewHelper(params.MetalCluster, params.Client)
+	helper, err := patch.NewHelper(params.IroncoreMetalCluster, params.Client)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to init patch helper")
 	}
@@ -82,7 +82,7 @@ func (s *ClusterScope) Namespace() string {
 
 // InfraClusterName returns the name of the Metal cluster.
 func (s *ClusterScope) InfraClusterName() string {
-	return s.MetalCluster.Name
+	return s.IroncoreMetalCluster.Name
 }
 
 // KubernetesClusterName is the name of the Kubernetes cluster. For the cluster
@@ -94,13 +94,13 @@ func (s *ClusterScope) KubernetesClusterName() string {
 // PatchObject persists the cluster configuration and status.
 func (s *ClusterScope) PatchObject() error {
 	// always update the readyCondition.
-	conditions.SetSummary(s.MetalCluster,
+	conditions.SetSummary(s.IroncoreMetalCluster,
 		conditions.WithConditions(
-			infrav1.MetalClusterReady,
+			infrav1.IroncoreMetalClusterReady,
 		),
 	)
 
-	return s.patchHelper.Patch(context.TODO(), s.MetalCluster)
+	return s.patchHelper.Patch(context.TODO(), s.IroncoreMetalCluster)
 }
 
 // Close closes the current scope persisting the cluster configuration and status.

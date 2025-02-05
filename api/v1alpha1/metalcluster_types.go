@@ -9,25 +9,25 @@ import (
 )
 
 const (
-	// ClusterFinalizer allows MetalClusterReconciler to clean up resources associated with MetalCluster before
+	// ClusterFinalizer allows IroncoreMetalClusterReconciler to clean up resources associated with IroncoreMetalCluster before
 	// removing it from the apiserver.
-	ClusterFinalizer = "metalcluster.infrastructure.cluster.x-k8s.io"
+	ClusterFinalizer = "ironcoremetalcluster.infrastructure.cluster.x-k8s.io"
 )
 
-// MetalClusterSpec defines the desired state of MetalCluster
-type MetalClusterSpec struct {
+// IroncoreMetalClusterSpec defines the desired state of IroncoreMetalCluster
+type IroncoreMetalClusterSpec struct {
 	// ControlPlaneEndpoint represents the endpoint used to communicate with the control plane.
 	// +optional
 	ControlPlaneEndpoint clusterv1.APIEndpoint `json:"controlPlaneEndpoint,omitempty"`
 }
 
-// MetalClusterStatus defines the observed state of MetalCluster
-type MetalClusterStatus struct {
+// IroncoreMetalClusterStatus defines the observed state of IroncoreMetalCluster
+type IroncoreMetalClusterStatus struct {
 	// Ready denotes that the cluster (infrastructure) is ready.
 	// +optional
 	Ready bool `json:"ready"`
 
-	// Conditions defines current service state of the MetalCluster.
+	// Conditions defines current service state of the IroncoreMetalCluster.
 	// +optional
 	Conditions clusterv1.Conditions `json:"conditions,omitempty"`
 }
@@ -35,34 +35,34 @@ type MetalClusterStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// MetalCluster is the Schema for the metalclusters API
-type MetalCluster struct {
+// IroncoreMetalCluster is the Schema for the ironcoremetalclusters API
+type IroncoreMetalCluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   MetalClusterSpec   `json:"spec,omitempty"`
-	Status MetalClusterStatus `json:"status,omitempty"`
+	Spec   IroncoreMetalClusterSpec   `json:"spec,omitempty"`
+	Status IroncoreMetalClusterStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// MetalClusterList contains a list of MetalCluster
-type MetalClusterList struct {
+// IroncoreMetalClusterList contains a list of IroncoreMetalCluster
+type IroncoreMetalClusterList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []MetalCluster `json:"items"`
+	Items           []IroncoreMetalCluster `json:"items"`
 }
 
-// GetConditions returns the observations of the operational state of the MetalCluster resource.
-func (c *MetalCluster) GetConditions() clusterv1.Conditions {
+// GetConditions returns the observations of the operational state of the IroncoreMetalCluster resource.
+func (c *IroncoreMetalCluster) GetConditions() clusterv1.Conditions {
 	return c.Status.Conditions
 }
 
-// SetConditions sets the underlying service state of the MetalCluster to the predescribed clusterv1.Conditions.
-func (c *MetalCluster) SetConditions(conditions clusterv1.Conditions) {
+// SetConditions sets the underlying service state of the IroncoreMetalCluster to the predescribed clusterv1.Conditions.
+func (c *IroncoreMetalCluster) SetConditions(conditions clusterv1.Conditions) {
 	c.Status.Conditions = conditions
 }
 
 func init() {
-	SchemeBuilder.Register(&MetalCluster{}, &MetalClusterList{})
+	SchemeBuilder.Register(&IroncoreMetalCluster{}, &IroncoreMetalClusterList{})
 }

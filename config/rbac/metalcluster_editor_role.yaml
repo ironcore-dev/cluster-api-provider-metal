@@ -1,16 +1,16 @@
-# permissions for end users to edit metalclusters.
+# permissions for end users to edit ironcoremetalclusters.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: cluster-api-provider-ironcore-metal
     app.kubernetes.io/managed-by: kustomize
-  name: metalcluster-editor-role
+  name: ironcoremetalcluster-editor-role
 rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters
+  - ironcoremetalclusters
   verbs:
   - create
   - delete
@@ -22,6 +22,6 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - metalclusters/status
+  - ironcoremetalclusters/status
   verbs:
   - get

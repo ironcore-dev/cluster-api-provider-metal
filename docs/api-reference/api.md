@@ -10,10 +10,10 @@
 </div>
 Resource Types:
 <ul></ul>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster
 </h3>
 <div>
-<p>MetalCluster is the Schema for the metalclusters API</p>
+<p>IroncoreMetalCluster is the Schema for the ironcoremetalclusters API</p>
 </div>
 <table>
 <thead>
@@ -41,8 +41,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterSpec">
-MetalClusterSpec
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterSpec">
+IroncoreMetalClusterSpec
 </a>
 </em>
 </td>
@@ -69,8 +69,8 @@ sigs.k8s.io/cluster-api/api/v1beta1.APIEndpoint
 <td>
 <code>status</code><br/>
 <em>
-<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterStatus">
-MetalClusterStatus
+<a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterStatus">
+IroncoreMetalClusterStatus
 </a>
 </em>
 </td>
@@ -79,13 +79,13 @@ MetalClusterStatus
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterSpec">MetalClusterSpec
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterSpec">IroncoreMetalClusterSpec
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster</a>)
 </p>
 <div>
-<p>MetalClusterSpec defines the desired state of MetalCluster</p>
+<p>IroncoreMetalClusterSpec defines the desired state of IroncoreMetalCluster</p>
 </div>
 <table>
 <thead>
@@ -109,13 +109,13 @@ sigs.k8s.io/cluster-api/api/v1beta1.APIEndpoint
 </tr>
 </tbody>
 </table>
-<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.MetalClusterStatus">MetalClusterStatus
+<h3 id="infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalClusterStatus">IroncoreMetalClusterStatus
 </h3>
 <p>
-(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.MetalCluster">MetalCluster</a>)
+(<em>Appears on:</em><a href="#infrastructure.cluster.x-k8s.io/v1alpha1.IroncoreMetalCluster">IroncoreMetalCluster</a>)
 </p>
 <div>
-<p>MetalClusterStatus defines the observed state of MetalCluster</p>
+<p>IroncoreMetalClusterStatus defines the observed state of IroncoreMetalCluster</p>
 </div>
 <table>
 <thead>
@@ -146,7 +146,7 @@ sigs.k8s.io/cluster-api/api/v1beta1.Conditions
 </td>
 <td>
 <em>(Optional)</em>
-<p>Conditions defines current service state of the MetalCluster.</p>
+<p>Conditions defines current service state of the IroncoreMetalCluster.</p>
 </td>
 </tr>
 </tbody>

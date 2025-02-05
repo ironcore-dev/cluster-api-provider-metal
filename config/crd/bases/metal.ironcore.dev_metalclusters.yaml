@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: metalclusters.metal.ironcore.dev
+  name: ironcoremetalclusters.metal.ironcore.dev
 spec:
   group: metal.ironcore.dev
   names:
-    kind: MetalCluster
-    listKind: MetalClusterList
-    plural: metalclusters
-    singular: metalcluster
+    kind: IroncoreMetalCluster
+    listKind: IroncoreMetalClusterList
+    plural: ironcoremetalclusters
+    singular: ironcoremetalcluster
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MetalCluster is the Schema for the metalclusters API
+        description: IroncoreMetalCluster is the Schema for the ironcoremetalclusters API
         properties:
           apiVersion:
             description: |-
@@ -37,7 +37,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: MetalClusterSpec defines the desired state of MetalCluster
+            description: IroncoreMetalClusterSpec defines the desired state of IroncoreMetalCluster
             properties:
               controlPlaneEndpoint:
                 description: ControlPlaneEndpoint represents the endpoint used to
@@ -56,10 +56,10 @@ spec:
                 type: object
             type: object
           status:
-            description: MetalClusterStatus defines the observed state of MetalCluster
+            description: IroncoreMetalClusterStatus defines the observed state of IroncoreMetalCluster
             properties:
               conditions:
-                description: Conditions defines current service state of the MetalCluster.
+                description: Conditions defines current service state of the IroncoreMetalCluster.
                 items:
                   description: Condition defines an observation of a Cluster API resource
                     operational state.

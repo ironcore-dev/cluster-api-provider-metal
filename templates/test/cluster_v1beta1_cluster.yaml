@@ -9,5 +9,5 @@ spec:
     name: kubeadmcontrolplane-sample-cp
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
-    kind: MetalCluster
-    name: metalcluster-sample
+    kind: IroncoreMetalCluster
+    name: ironcoremetalcluster-sample

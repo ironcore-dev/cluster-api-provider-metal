@@ -26,6 +26,6 @@ resources:
 - ironcoremetalmachinetemplate_viewer_role.yaml
 - ironcoremetalmachine_editor_role.yaml
 - ironcoremetalmachine_viewer_role.yaml
-- metalcluster_editor_role.yaml
-- metalcluster_viewer_role.yaml
+- ironcoremetalcluster_editor_role.yaml
+- ironcoremetalcluster_viewer_role.yaml
 

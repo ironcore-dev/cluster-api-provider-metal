@@ -123,11 +123,11 @@ func main() {
 	// Set up the context that's going to be used in controllers and for the manager.
 	ctx := ctrl.SetupSignalHandler()
 
-	if err = (&controller.MetalClusterReconciler{
+	if err = (&controller.IroncoreMetalClusterReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(ctx, mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MetalCluster")
+		setupLog.Error(err, "unable to create controller", "controller", "IroncoreMetalCluster")
 		os.Exit(1)
 	}
 	if err = (&controller.IroncoreMetalMachineReconciler{

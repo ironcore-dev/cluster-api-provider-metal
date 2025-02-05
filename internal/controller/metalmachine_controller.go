@@ -100,10 +100,10 @@ func (r *IroncoreMetalMachineReconciler) Reconcile(ctx context.Context, req ctrl
 		Name:      cluster.Spec.InfrastructureRef.Name,
 	}
 
-	metalCluster := &infrav1alpha1.MetalCluster{}
+	metalCluster := &infrav1alpha1.IroncoreMetalCluster{}
 	if err := r.Client.Get(ctx, metalClusterName, metalCluster); err != nil {
 		if apierrors.IsNotFound(err) || !metalCluster.Status.Ready {
-			logger.Info("MetalCluster is not available yet")
+			logger.Info("IroncoreMetalCluster is not available yet")
 			return ctrl.Result{}, nil
 		}
 		return reconcile.Result{}, err
@@ -111,11 +111,11 @@ func (r *IroncoreMetalMachineReconciler) Reconcile(ctx context.Context, req ctrl
 
 	// Create the cluster scope.
 	clusterScope, err := scope.NewClusterScope(scope.ClusterScopeParams{
-		Client:         r.Client,
-		Logger:         &logger,
-		Cluster:        cluster,
-		MetalCluster:   metalCluster,
-		ControllerName: "metalcluster",
+		Client:               r.Client,
+		Logger:               &logger,
+		Cluster:              cluster,
+		IroncoreMetalCluster: metalCluster,
+		ControllerName:       "ironcoremetalcluster",
 	})
 
 	if err != nil {
@@ -127,7 +127,7 @@ func (r *IroncoreMetalMachineReconciler) Reconcile(ctx context.Context, req ctrl
 		Client:               r.Client,
 		Cluster:              cluster,
 		Machine:              machine,
-		MetalCluster:         metalCluster,
+		IroncoreMetalCluster: metalCluster,
 		IroncoreMetalMachine: metalMachine,
 	})
 

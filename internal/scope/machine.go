@@ -23,7 +23,7 @@ type MachineScopeParams struct {
 	Logger               *logr.Logger
 	Cluster              *clusterv1.Cluster
 	Machine              *clusterv1.Machine
-	MetalCluster         *infrav1.MetalCluster
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
 	IroncoreMetalMachine *infrav1.IroncoreMetalMachine
 }
 
@@ -34,7 +34,7 @@ type MachineScope struct {
 	patchHelper          *patch.Helper
 	Cluster              *clusterv1.Cluster
 	Machine              *clusterv1.Machine
-	MetalCluster         *infrav1.MetalCluster
+	IroncoreMetalCluster *infrav1.IroncoreMetalCluster
 	IroncoreMetalMachine *infrav1.IroncoreMetalMachine
 	ServerClaim          *v1alpha1.ServerClaim
 }
@@ -51,8 +51,8 @@ func NewMachineScope(params MachineScopeParams) (*MachineScope, error) {
 	if params.Machine == nil {
 		return nil, errors.New("Machine is required when creating a MachineScope")
 	}
-	if params.MetalCluster == nil {
-		return nil, errors.New("MetalCluster is required when creating a MachineScope")
+	if params.IroncoreMetalCluster == nil {
+		return nil, errors.New("IroncoreMetalCluster is required when creating a MachineScope")
 	}
 	if params.IroncoreMetalMachine == nil {
 		return nil, errors.New("IroncoreMetalMachine is required when creating a MachineScope")
@@ -67,7 +67,7 @@ func NewMachineScope(params MachineScopeParams) (*MachineScope, error) {
 		client:               params.Client,
 		Cluster:              params.Cluster,
 		Machine:              params.Machine,
-		MetalCluster:         params.MetalCluster,
+		IroncoreMetalCluster: params.IroncoreMetalCluster,
 		IroncoreMetalMachine: params.IroncoreMetalMachine,
 	}
 

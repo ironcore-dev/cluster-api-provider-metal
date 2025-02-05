@@ -282,10 +282,10 @@ k8s_resource(
     auto_init=False
 )
 
-k8s_yaml('./config/samples/infrastructure_v1alpha1_metalcluster.yaml')
+k8s_yaml('./config/samples/infrastructure_v1alpha1_ironcoremetalcluster.yaml')
 k8s_resource(
-    objects=['metalcluster-sample:metalcluster'],
-    new_name='metalcluster-sample',
+    objects=['ironcoremetalcluster-sample:ironcoremetalcluster'],
+    new_name='ironcoremetalcluster-sample',
     trigger_mode=TRIGGER_MODE_MANUAL,
     auto_init=False
 )
